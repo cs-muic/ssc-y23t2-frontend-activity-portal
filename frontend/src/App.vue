@@ -5,7 +5,7 @@
       <v-toolbar-title>Act-Portal</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn href="" target="_blank text">
+      <v-btn @click="logout" target="_blank text">
         <span class="mr-2">{{ getUsername() }}</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
 
@@ -29,6 +31,12 @@ export default {
   methods: {
     getUsername() {
       return this.$store.state.username;
+    },
+    logout() {
+      console.log("LOGGING OUT");
+      this.$store.commit("clearUser");
+      axios.get("/api/logout");
+      this.$router.push("/login");
     },
   },
 };
