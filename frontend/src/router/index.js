@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import axios from "axios";
 
 const routes = [
   {
@@ -30,6 +31,14 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+// Setup beforeEach hook. Check login states with backend
+router.beforeEach(async (to, from, next) => {
+  let response = await axios.get("/api/whoami");
+  console.log(response);
+  if (to.name !== "login") next({ name: "login" });
+  else next();
 });
 
 export default router;
