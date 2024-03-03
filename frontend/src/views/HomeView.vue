@@ -1,18 +1,22 @@
 <template>
-  <HelloWorld />
+  <v-container>
+    <h2>Home Page</h2>
+    <ul>
+      <li><router-link to="/">To: Home</router-link></li>
+      <li><router-link to="/about">To: About</router-link></li>
+      <li><router-link to="/login">To: Login</router-link></li>
+    </ul>
+  </v-container>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 
 // Components
-import HelloWorld from "../components/HelloWorld.vue";
 
 export default defineComponent({
   name: "HomeView",
 
-  components: {
-    HelloWorld,
-  },
+  components: {},
 });
 </script>
