@@ -8,9 +8,10 @@ export default createStore({
     role: "",
   },
   getters: {},
-  mutations: {
+  mutations: {},
+  actions: {
     setLoggedInUser(state, payload) {
-      state.isLoggedIn = true;
+      state.isLoggedIn = payload.isLoggedIn;
       state.username = payload.username;
       state.displayName = payload.displayName;
       state.role = payload.role;
@@ -22,6 +23,5 @@ export default createStore({
       state.role = "";
     },
   },
-  actions: {},
   modules: {},
 });

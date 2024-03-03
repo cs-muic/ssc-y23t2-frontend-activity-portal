@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import axios from "axios";
+import store from "@/store";
 
 const routes = [
   {
@@ -36,9 +37,12 @@ const router = createRouter({
 // Setup beforeEach hook. Check login states with backend
 router.beforeEach(async (to, from, next) => {
   let response = await axios.get("/api/whoami");
-  console.log(response);
-  if (to.name !== "login") next({ name: "login" });
-  else next();
+  // eslint-disable-next-line no-unused-vars
+  store.dispatch("setLoggedInUser", response.data).then((res) => {
+    let isLoggedIn = store.state.isLoggedIn;
+    if (to.name !== "login" && !isLoggedIn) next({ name: "login" });
+    else next();
+  });
 });
 
 export default router;
