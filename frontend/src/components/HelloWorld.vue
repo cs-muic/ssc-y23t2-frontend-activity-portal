@@ -11,7 +11,9 @@
       </v-col>
 
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome to Vuetify</h1>
+        <h1 class="display-2 font-weight-bold mb-3">
+          Welcome to the Vuetify 3 Beta
+        </h1>
 
         <p class="subheading font-weight-regular">
           For help and collaboration with other Vuetify developers,
@@ -23,7 +25,7 @@
       </v-col>
 
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
+        <h2 class="headline font-weight-bold mb-5">What's next?</h2>
 
         <v-row justify="center">
           <a
@@ -39,7 +41,7 @@
       </v-col>
 
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
+        <h2 class="headline font-weight-bold mb-5">Important Links</h2>
 
         <v-row justify="center">
           <a
@@ -55,7 +57,7 @@
       </v-col>
 
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
+        <h2 class="headline font-weight-bold mb-5">Ecosystem</h2>
 
         <v-row justify="center">
           <a
@@ -81,11 +83,11 @@ export default {
     ecosystem: [
       {
         text: "vuetify-loader",
-        href: "https://github.com/vuetifyjs/vuetify-loader",
+        href: "https://github.com/vuetifyjs/vuetify-loader/tree/next",
       },
       {
         text: "github",
-        href: "https://github.com/vuetifyjs/vuetify",
+        href: "https://github.com/vuetifyjs/vuetify/tree/next",
       },
       {
         text: "awesome-vuetify",
@@ -93,10 +95,6 @@ export default {
       },
     ],
     importantLinks: [
-      {
-        text: "Documentation",
-        href: "https://vuetifyjs.com",
-      },
       {
         text: "Chat",
         href: "https://community.vuetifyjs.com",
@@ -117,11 +115,11 @@ export default {
     whatsNext: [
       {
         text: "Explore components",
-        href: "https://vuetifyjs.com/components/api-explorer",
+        href: "https://vuetifyjs.com",
       },
       {
-        text: "Select a layout",
-        href: "https://vuetifyjs.com/getting-started/pre-made-layouts",
+        text: "Roadmap",
+        href: "https://vuetifyjs.com/introduction/roadmap/",
       },
       {
         text: "Frequently Asked Questions",

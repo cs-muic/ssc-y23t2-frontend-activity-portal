@@ -1,16 +1,18 @@
 <template>
-  <hello-world />
+  <HelloWorld />
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
+import { defineComponent } from "vue";
 
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Home",
+// Components
+import HelloWorld from "../components/HelloWorld.vue";
+
+export default defineComponent({
+  name: "HomeView",
 
   components: {
     HelloWorld,
   },
-};
+});
 </script>
