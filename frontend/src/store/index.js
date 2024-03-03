@@ -10,12 +10,10 @@ export default createStore({
   getters: {},
   mutations: {
     setLoggedInUser: function (state, payload) {
-      console.log(payload);
       state.loggedIn = payload.loggedIn;
       state.username = payload.username;
       state.displayName = payload.displayName;
       state.role = payload.role;
-      console.log(state);
     },
     clearUser: function (state) {
       state.loggedIn = false;

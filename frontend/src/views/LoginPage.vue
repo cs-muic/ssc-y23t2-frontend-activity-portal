@@ -17,11 +17,11 @@
       ></v-text-field>
 
       <div class="d-flex flex-column">
-        <v-btn class="mt-4" color="success" block @click="submit">
+        <v-btn class="mt-4" color="#ad1d25" block @click="submit">
           Login
         </v-btn>
 
-        <v-btn class="mt-4" color="error" block @click="reset"> Reset </v-btn>
+        <v-btn class="mt-4" color="#636161" block @click="reset"> Reset </v-btn>
       </div>
     </v-form>
   </v-sheet>
