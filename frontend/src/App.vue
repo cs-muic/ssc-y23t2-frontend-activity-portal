@@ -33,7 +33,6 @@ export default {
       return this.$store.state.username;
     },
     logout() {
-      console.log("LOGGING OUT");
       this.$store.commit("clearUser");
       axios.get("/api/logout");
       this.$router.push("/login");
