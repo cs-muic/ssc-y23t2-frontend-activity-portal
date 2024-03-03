@@ -2,26 +2,28 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    isLoggedIn: false,
+    loggedIn: false,
     username: null,
     displayName: null,
     role: "",
   },
   getters: {},
-  mutations: {},
-  actions: {
-    setLoggedInUser(state, payload) {
-      state.isLoggedIn = payload.isLoggedIn;
+  mutations: {
+    setLoggedInUser: function (state, payload) {
+      console.log(payload);
+      state.loggedIn = payload.loggedIn;
       state.username = payload.username;
       state.displayName = payload.displayName;
       state.role = payload.role;
+      console.log(state);
     },
-    clearUser(state) {
-      state.isLoggedIn = false;
+    clearUser: function (state) {
+      state.loggedIn = false;
       state.username = null;
       state.name = null;
       state.role = "";
     },
   },
+  actions: {},
   modules: {},
 });

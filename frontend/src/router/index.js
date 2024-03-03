@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import axios from "axios";
 import store from "@/store";
+import AboutView from "@/views/AboutView.vue";
+import LoginPage from "@/views/LoginPage.vue";
 
 const routes = [
   {
@@ -12,20 +14,12 @@ const routes = [
   {
     path: "/about",
     name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    component: AboutView,
   },
   {
     path: "/login",
     name: "login",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/LoginPage.vue"),
+    component: LoginPage,
   },
 ];
 
@@ -38,11 +32,10 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   let response = await axios.get("/api/whoami");
   // eslint-disable-next-line no-unused-vars
-  store.dispatch("setLoggedInUser", response.data).then((res) => {
-    let isLoggedIn = store.state.isLoggedIn;
-    if (to.name !== "login" && !isLoggedIn) next({ name: "login" });
-    else next();
-  });
+  store.commit("setLoggedInUser", response.data);
+  let isLoggedIn = store.state.loggedIn;
+  if (to.name !== "login" && !isLoggedIn) next({ name: "login" });
+  else next();
 });
 
 export default router;

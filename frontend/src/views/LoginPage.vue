@@ -27,27 +27,42 @@
   </v-sheet>
 </template>
 <script>
+import axios from "axios";
+import router from "@/router";
 export default {
+  name: "LoginPage",
+
   data: () => ({
     valid: true,
     username: "",
     usernameRules: [(v) => !!v || "Username is required"],
     password: "",
     passwordRules: [(v) => !!v || "Password is required"],
-    select: null,
   }),
 
   methods: {
     async submit() {
       const { valid } = await this.$refs.form.validate();
 
-      if (valid) alert("Form is valid");
+      if (valid) {
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("password", this.password);
+        axios
+          .post("/api/login", formData)
+          .then(function (response) {
+            if (response.data.success) {
+              console.log(response);
+              router.push("/");
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     },
     reset() {
       this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
     },
   },
 };
