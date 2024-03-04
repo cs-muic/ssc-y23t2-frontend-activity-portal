@@ -5,6 +5,9 @@ import store from "@/store";
 import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
 
+/**
+ * The route for various paths
+ */
 const routes = [
   {
     path: "/",
@@ -28,8 +31,11 @@ const router = createRouter({
   routes,
 });
 
-// Setup beforeEach hook. Check login states with backend
+/**
+ * setup that will run before entering each path
+ */
 router.beforeEach(async (to, from, next) => {
+  // check user status via API
   let response = await axios.get("/api/whoami");
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);

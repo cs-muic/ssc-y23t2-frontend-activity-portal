@@ -5,6 +5,9 @@ import "vuetify/styles";
 // Vuetify
 import { createVuetify } from "vuetify";
 
+/**
+ * Vuetify common settings here
+ */
 export default createVuetify({
   theme: {
     defaultTheme: "dark",

@@ -20,6 +20,7 @@
 </template>
 
 <script>
+//This will be run on every page
 import axios from "axios";
 
 export default {
@@ -29,9 +30,11 @@ export default {
     //
   }),
   methods: {
+    //getting the username from the store
     getUsername() {
       return this.$store.state.username;
     },
+    //logging the user out
     logout() {
       this.$store.commit("clearUser");
       axios.get("/api/logout");

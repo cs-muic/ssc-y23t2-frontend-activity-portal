@@ -9,6 +9,7 @@ import { loadFonts } from "./plugins/webfontloader";
 
 loadFonts();
 
+//linking the needed stuffs to app
 createApp(App)
   .use(router)
   .use(store)
