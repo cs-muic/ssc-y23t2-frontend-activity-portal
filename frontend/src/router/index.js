@@ -4,6 +4,7 @@ import axios from "axios";
 import store from "@/store";
 import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
+import SignupPage from "@/views/SignupPage.vue";
 
 /**
  * The route for various paths
@@ -24,6 +25,11 @@ const routes = [
     name: "login",
     component: LoginPage,
   },
+  {
+    path: "/signup",
+    name: "signup",
+    component: SignupPage,
+  },
 ];
 
 const router = createRouter({
@@ -40,7 +46,8 @@ router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
   let isLoggedIn = store.state.loggedIn;
-  if (to.name !== "login" && !isLoggedIn) next({ name: "login" });
+  if (to.name !== "login" && to.name !== "signup" && !isLoggedIn)
+    next({ name: "login" });
   else next();
 });
 
