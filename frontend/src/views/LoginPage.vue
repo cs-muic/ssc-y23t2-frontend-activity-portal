@@ -22,6 +22,9 @@
         </v-btn>
 
         <v-btn class="mt-4" color="#636161" block @click="reset"> Reset </v-btn>
+        <v-btn class="mt-4" color="#3cb371" block @click="createAccount">
+          Create Account
+        </v-btn>
       </div>
     </v-form>
   </v-sheet>
@@ -63,6 +66,9 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+    createAccount() {
+      router.push("/signup");
     },
   },
 };
