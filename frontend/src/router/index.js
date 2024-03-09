@@ -4,11 +4,17 @@ import axios from "axios";
 import store from "@/store";
 import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
+import WebsocketDemo from "@/views/StompDemo.vue";
 
 /**
  * The route for various paths
  */
 const routes = [
+  {
+    path: "/stomping",
+    name: "stomp",
+    component: WebsocketDemo,
+  },
   {
     path: "/",
     name: "home",
