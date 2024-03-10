@@ -14,8 +14,10 @@
     "roboto-fontface": "*",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
+    "vue-ctk-date-time-picker": "^3.0.0-alpha.0",
     "vue-router": "^4.0.3",
     "vuetify": "^3.0.0-beta.0",
+    "vuetify-datetime-picker": "^2.1.1",
     "vuex": "^4.0.0",
     "webfontloader": "^1.0.0"
   },
