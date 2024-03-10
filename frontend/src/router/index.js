@@ -6,6 +6,7 @@ import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import EditProfile from "@/views/EditProfile.vue";
+import ChangePassword from "@/views/ChangePassword.vue";
 
 /**
  * The route for various paths
@@ -35,6 +36,11 @@ const routes = [
     path: "/edit-profile",
     name: "edit-profile",
     component: EditProfile,
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
   },
 ];
 
