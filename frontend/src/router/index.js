@@ -5,6 +5,7 @@ import store from "@/store";
 import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
+import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
 
 /**
  * The route for various paths
@@ -29,6 +30,11 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignupPage,
+  },
+  {
+    path: "/create-activity",
+    name: "create activity",
+    component: ActivityCreatePage,
   },
 ];
 
