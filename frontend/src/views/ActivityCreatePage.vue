@@ -1,3 +1,4 @@
+// TODO: make the form taller so that it fits the date time picker
 <template>
   <div>
     <h1 class="text-center">Create Activity</h1>
@@ -47,7 +48,6 @@
                   <v-btn block class="mt-4" color="#ad1d25" @click="submit">
                     Create Activity
                   </v-btn>
-
                   <v-btn block class="mt-4" color="#636161" @click="reset">
                     Reset
                   </v-btn>
@@ -87,6 +87,8 @@ export default {
       descriptionRules: [(v) => !!v || "Description is required"],
     };
   },
+
+  //TODO: compute so that end time can't be before start time.
 
   methods: {
     async submit() {
