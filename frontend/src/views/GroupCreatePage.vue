@@ -59,11 +59,11 @@ export default defineComponent({
       valid: true,
       groupName: "",
       groupNameRules: [(v) => !!v || "Group name is required!"],
-      maxMember: "",
+      maxMember: 0,
       maxMemberRules: [(v) => !!v || "You must set the group size!"],
-      isPrivate: "",
       publicDescription: "",
-      publicDescriptionRules: [(v) => !!v || "Group name is required!"],
+      isPrivate: false,
+      publicDescriptionRules: [],
     };
   },
   components: {},
@@ -74,10 +74,12 @@ export default defineComponent({
         const group = {
           groupName: this.groupName,
           isPrivate: this.isPrivate,
+          maxMember: this.maxMember,
           publicDescription: this.publicDescription,
           privateDescription: this.privateDescription,
           ownerID: this.$store.state.userID,
         };
+        console.log(group);
         axios
           .post("/api/group-create", group)
           .then(function (response) {
