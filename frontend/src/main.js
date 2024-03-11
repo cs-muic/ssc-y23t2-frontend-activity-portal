@@ -6,6 +6,8 @@ import vuetify from "./plugins/vuetify";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { loadFonts } from "./plugins/webfontloader";
+import VueCtkDateTimePicker from "vue-ctk-date-time-picker";
+import "vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
 
 loadFonts();
 
@@ -15,4 +17,5 @@ createApp(App)
   .use(store)
   .use(vuetify)
   .use(VueAxios, axios)
+  .component("VueCtkDateTimePicker", VueCtkDateTimePicker)
   .mount("#app");
