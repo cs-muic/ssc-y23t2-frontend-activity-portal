@@ -7,7 +7,13 @@
         label="Display Name"
         required
       ></v-text-field>
-
+      <v-textarea
+        v-model="bio"
+        :rules="bioRules"
+        label="Bio"
+        counter
+        :maxlength="512"
+      ></v-textarea>
       <div class="d-flex flex-column">
         <v-btn block class="mt-4" color="#ad1d25" @click="submit">
           Update Profile
@@ -24,14 +30,26 @@ import axios from "axios";
 import router from "@/router";
 
 export default {
-  name: "LoginPage",
+  name: "EditProfilePage",
 
   data() {
     return {
       valid: true,
       displayname: "",
       displaynameRules: [(v) => !!v || "Display Name is required"],
+      bio: "",
     };
+  },
+  created() {
+    axios
+      .get("/api/whoami")
+      .then((response) => {
+        this.displayname = response.data.displayName;
+        this.bio = response.data.bio;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {
@@ -40,6 +58,7 @@ export default {
       if (valid) {
         const user = {
           displayName: this.displayname,
+          bio: this.bio,
         };
         axios
           .post("/api/edit-profile", user)
