@@ -7,6 +7,7 @@ import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import EditProfile from "@/views/EditProfile.vue";
 import ChangePassword from "@/views/ChangePassword.vue";
+import UserProfile from "@/views/UserProfile.vue";
 
 /**
  * The route for various paths
@@ -41,6 +42,11 @@ const routes = [
     path: "/change-password",
     name: "change-password",
     component: ChangePassword,
+  },
+  {
+    path: "/user/:username",
+    name: "user-profile",
+    component: UserProfile,
   },
 ];
 
