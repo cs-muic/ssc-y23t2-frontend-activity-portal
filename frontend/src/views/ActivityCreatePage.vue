@@ -31,6 +31,7 @@
                       v-model="activity.end_time"
                       :rules="endTimeRules"
                       label="End Time"
+                      min-date="activity.start_time"
                       dark
                       required
                     ></VueCtkDateTimePicker>
@@ -82,8 +83,6 @@ export default {
       nameRules: [(v) => !!v || "Name is required"],
       startTimeRules: [(v) => !!v || "Start Time is required"],
       endTimeRules: [(v) => !!v || "End Time is required"],
-      cleanupDateRules: [(v) => !!v || "Cleanup Date is required"],
-      autoDeleteOvertimeRules: [],
       descriptionRules: [(v) => !!v || "Description is required"],
     };
   },
