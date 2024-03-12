@@ -5,6 +5,8 @@ import store from "@/store";
 import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
+import GroupSearchPage from "@/views/GroupSearchPage.vue";
+import GroupCreatePage from "@/views/GroupCreatePage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
 
 /**
@@ -30,6 +32,16 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignupPage,
+  },
+  {
+    path: "/group-search",
+    name: "group-search",
+    component: GroupSearchPage,
+  },
+  {
+    path: "/group-create",
+    name: "group-create",
+    component: GroupCreatePage,
   },
   {
     path: "/create-activity",
