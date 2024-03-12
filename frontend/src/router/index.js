@@ -7,6 +7,7 @@ import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
+import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
 
 /**
  * The route for various paths
@@ -41,6 +42,11 @@ const routes = [
     path: "/group-create",
     name: "group-create",
     component: GroupCreatePage,
+  },
+  {
+    path: "/create-activity",
+    name: "create activity",
+    component: ActivityCreatePage,
   },
 ];
 
