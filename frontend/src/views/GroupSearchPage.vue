@@ -4,7 +4,7 @@
       <h1>Group List</h1>
     </center>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="items"></v-data-table>
+    <v-data-table :headers="headers" :items="data"></v-data-table>
   </v-container>
 </template>
 <script>
@@ -20,24 +20,33 @@ export default defineComponent({
 
   methods: {
     getAllSearch() {
-      return axios.get("/api/search-account");
+      return axios
+        .get("/api/group-search/fetch-all-groups")
+        .then((response) => {
+          this.data = response.data;
+          console.log(response.data);
+        })
+        .catch((err) => alert(err));
     },
   },
 
   data() {
     return {
-      headers: ["a", "b"],
-      items: [
-        {
-          a: 1,
-          b: 2,
-        },
-        {
-          a: 1,
-          b: 2,
-        },
+      headers: [
+        { title: "#", key: "id" },
+        { title: "Group name", key: "groupName" },
+        { title: "Group size", key: "maxMember" },
+        { title: "members", key: "memberCount" },
+        { title: "Owner", key: "ownerID" }, // Maybe change this field to owner name
+        { title: "Description", key: "publicDescription" },
+        { title: "private", key: "isPrivate" },
       ],
+      data: [],
     };
+  },
+
+  mounted() {
+    this.getAllSearch();
   },
 });
 </script>
