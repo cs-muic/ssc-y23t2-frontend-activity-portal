@@ -2,11 +2,10 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <v-card c="mx-auto" width="1000">
+        <v-sheet class="mx-auto" width="1000">
           <v-card-text>
             <v-form ref="form">
               <h1 class="text-center">Create Activity</h1>
-
               <v-text-field
                 v-model="activity.name"
                 label="Name"
@@ -47,11 +46,12 @@
               </v-btn>
             </v-form>
           </v-card-text>
-        </v-card>
+        </v-sheet>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
 <script>
 import axios from "axios";
 import router from "@/router";
@@ -71,7 +71,10 @@ export default {
         description: "",
       },
       nameRules: [(v) => !!v || "Name is required"],
-      startTimeRules: [(v) => !!v || "Start Time is required"],
+      startTimeRules: [
+        (v) => !!v || "Start Time is required",
+        () => this.startTimeNotEarlier,
+      ],
       endTimeRules: [
         (v) => !!v || "End Time is required",
         () => this.endTimeNotEarlier,
@@ -80,8 +83,17 @@ export default {
     };
   },
 
-  //TODO: compute so that end time can't be before start time.
   computed: {
+    computed: {
+      startTimeNotEarlier() {
+        let now = new Date();
+        now.setSeconds(0, 0);
+        return (
+          this.activity.start_time >= now ||
+          "Start Time cannot be earlier than current time"
+        );
+      },
+    },
     endTimeNotEarlier() {
       return (
         this.activity >= this.activity.start_time ||
