@@ -54,6 +54,11 @@ const routes = [
     name: "user activities",
     component: UserActivityPage,
   },
+  {
+    path: "/unjoin-activity/:activityID",
+    name: "unjoin activity",
+    component: UserActivityPage,
+  },
 ];
 
 const router = createRouter({

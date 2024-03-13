@@ -1,52 +1,58 @@
 <template>
   <v-container>
-    <center>
-      <h1>Activity List</h1>
-    </center>
+    <div style="text-align: center">
+      <h1>Activity List for User: {{ getUsername() }}</h1>
+    </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="data"></v-data-table>
+    <v-data-table :headers="headers" :items="activities">
+      <template v-slot:[`item.action`]="{ item }">
+        <v-btn @click="unjoinActivity(item.id)" color="error"> Unjoin</v-btn>
+      </template>
+    </v-data-table>
   </v-container>
 </template>
+
 <script>
-import { defineComponent } from "vue";
 import axios from "axios";
-// import router from "@/router";
 
-// Components
-export default defineComponent({
-  name: "GroupSearchPage",
-
-  components: {},
-
-  methods: {
-    getAllSearch() {
-      return axios
-        .get("/api/user-activities")
-        .then((response) => {
-          this.data = response.data;
-          console.log(response.data);
-        })
-        .catch((err) => alert(err));
-    },
-  },
-
+export default {
   data() {
     return {
       headers: [
-        { title: "#", key: "id" },
-        { title: "Activity Name", key: "name" },
-        { title: "Description", key: "description" },
-        { title: "Location", key: "location" },
-        { title: "Start Time", key: "start_time" },
-        { title: "End Time", key: "end_time" },
-        { title: "Status", key: "ownerID" }, // Maybe change this field to owner name
+        { title: "Name", value: "name" },
+        { title: "Start Time", value: "start_time" },
+        { title: "End Time", value: "end_time" },
+        { title: "Description", value: "description" },
+        { title: "Action", value: "action" },
       ],
-      data: [],
+      activities: [],
     };
   },
-
-  mounted() {
-    this.getAllSearch();
+  methods: {
+    getUsername() {
+      return this.$store.state.username;
+    },
+    getActivities() {
+      return axios
+        .get("api/user-activities")
+        .then((response) => {
+          this.activities = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    unjoinActivity(activityId) {
+      axios.post(`/api/unjoin-activity/${activityId}`).then(() => {
+        axios.get("api/user-activities").then((response) => {
+          this.activities = response.data;
+        });
+      });
+    },
   },
-});
+  mounted() {
+    console.log(this.getActivities());
+    this.getActivities();
+  },
+};
 </script>
