@@ -19,6 +19,7 @@
                     label="Start Time"
                     dark
                     required
+                    :rules="startTimeRules"
                   ></VueCtkDateTimePicker>
                 </v-col>
                 <v-col cols="6">
@@ -28,6 +29,7 @@
                     :min-date="activity.start_time"
                     dark
                     required
+                    :rules="endTimeRules"
                   ></VueCtkDateTimePicker>
                 </v-col>
               </v-row>
@@ -73,7 +75,7 @@ export default {
       nameRules: [(v) => !!v || "Name is required"],
       startTimeRules: [
         (v) => !!v || "Start Time is required",
-        () => this.startTimeNotEarlier,
+        () => this.startTimeNotEarlierToday,
       ],
       endTimeRules: [
         (v) => !!v || "End Time is required",
@@ -84,19 +86,20 @@ export default {
   },
 
   computed: {
-    computed: {
-      startTimeNotEarlier() {
-        let now = new Date();
-        now.setSeconds(0, 0);
-        return (
-          this.activity.start_time >= now ||
-          "Start Time cannot be earlier than current time"
-        );
-      },
+    startTimeNotEarlierToday() {
+      let now = new Date();
+      now.setHours(0, 0, 0, 0);
+      return (
+        !this.activity.start_time ||
+        new Date(this.activity.start_time) >= now ||
+        "Start Time cannot be earlier than today"
+      );
     },
     endTimeNotEarlier() {
       return (
-        this.activity >= this.activity.start_time ||
+        !this.activity.end_time ||
+        new Date(this.activity.end_time) >=
+          new Date(this.activity.start_time) ||
         "End time can't be before start time"
       );
     },
