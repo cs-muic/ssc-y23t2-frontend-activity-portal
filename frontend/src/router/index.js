@@ -8,7 +8,10 @@ import SignupPage from "@/views/SignupPage.vue";
 import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
-
+import EditProfile from "@/views/EditProfile.vue";
+import ChangePassword from "@/views/ChangePassword.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
 /**
  * The route for various paths
  */
@@ -48,6 +51,26 @@ const routes = [
     name: "create activity",
     component: ActivityCreatePage,
   },
+  {
+    path: "/edit-profile",
+    name: "edit-profile",
+    component: EditProfile,
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
+  },
+  {
+    path: "/user/:username",
+    name: "user-profile",
+    component: UserProfile,
+  },
+  {
+    path: "/welcome",
+    name: "welcome",
+    component: UnauthorizedHomePage,
+  },
 ];
 
 const router = createRouter({
@@ -64,7 +87,12 @@ router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
   let isLoggedIn = store.state.loggedIn;
-  if (to.name !== "login" && to.name !== "signup" && !isLoggedIn)
+  if (
+    to.name !== "login" &&
+    to.name !== "signup" &&
+    to.name !== "welcome" &&
+    !isLoggedIn
+  )
     next({ name: "login" });
   else next();
 });
