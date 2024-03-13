@@ -7,6 +7,7 @@ import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
+import GroupPage from "@/views/GroupPage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
 
 /**
@@ -47,6 +48,11 @@ const routes = [
     path: "/create-activity",
     name: "create activity",
     component: ActivityCreatePage,
+  },
+  {
+    path: "/group/:groupID",
+    name: "group-page",
+    component: GroupPage,
   },
 ];
 

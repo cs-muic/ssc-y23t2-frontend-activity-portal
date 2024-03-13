@@ -4,7 +4,14 @@
       <h1>Group List</h1>
     </center>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="data"></v-data-table>
+    <v-data-table :headers="headers" :items="data">
+      <template v-slot:[`item.memberCount`]="{ item }"
+        >{{ item.memberCount }} / {{ item.maxMember }}</template
+      >
+      <template v-slot:[`item.id`]="{ item }"
+        >{{ item.id }} <v-icon v-if="item.isPrivate">mdi-lock</v-icon></template
+      >
+    </v-data-table>
   </v-container>
 </template>
 <script>
@@ -35,11 +42,9 @@ export default defineComponent({
       headers: [
         { title: "#", key: "id" },
         { title: "Group name", key: "groupName" },
-        { title: "Group size", key: "maxMember" },
         { title: "members", key: "memberCount" },
         { title: "Owner", key: "ownerID" }, // Maybe change this field to owner name
         { title: "Description", key: "publicDescription" },
-        { title: "private", key: "isPrivate" },
       ],
       data: [],
     };
