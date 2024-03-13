@@ -1,11 +1,18 @@
 <template>
-  <v-container>
-    <h1>{{ groupID }} {{ groupName }}</h1>
-    <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-  </v-container>
   <v-col align-self="center">
+    <v-container>
+      <center>
+        <h1>{{ groupName }}</h1>
+        {{ groupID }}
+      </center>
+      <v-divider :thickness="20" class="border-opacity-0"></v-divider>
+    </v-container>
     <v-sheet class="mx-auto w-75 h-50">
-      <v-container class="mx-auto w-65 h-40"> </v-container>
+      <v-container class="mx-auto w-65 h-40">
+        {{ memberCount }} / {{ maxMember }}
+        <h1>{{ publicDescription }}</h1>
+        <v-container> {{ privateDescription }} </v-container>
+      </v-container>
     </v-sheet>
   </v-col>
 </template>
@@ -16,6 +23,7 @@ import router from "@/router";
 
 // Components
 export default defineComponent({
+  props: {},
   name: "GroupSearchPage",
 
   components: {},
