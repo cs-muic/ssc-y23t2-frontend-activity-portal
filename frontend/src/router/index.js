@@ -64,7 +64,12 @@ router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
   let isLoggedIn = store.state.loggedIn;
-  if (to.name !== "login" && to.name !== "signup" && !isLoggedIn)
+  if (
+    to.name !== "login" &&
+    to.name !== "signup" &&
+    to.name !== "welcome" &&
+    !isLoggedIn
+  )
     next({ name: "login" });
   else next();
 });

@@ -2,38 +2,21 @@
   <v-sheet class="mx-auto" width="300">
     <v-form ref="form">
       <v-text-field
-        v-model="username"
-        :rules="usernameRules"
-        label="Username"
-        required
-      ></v-text-field>
-
-      <v-text-field
         v-model="displayname"
         :rules="displaynameRules"
         label="Display Name"
         required
       ></v-text-field>
-
-      <v-text-field
-        v-model="password"
-        :rules="passwordRules"
-        label="Password"
-        required
-        type="password"
-      ></v-text-field>
-
-      <v-text-field
-        v-model="confirmPassword"
-        :rules="confirmPasswordRules"
-        label="Confirm Password"
-        required
-        type="password"
-      ></v-text-field>
-
+      <v-textarea
+        v-model="bio"
+        :rules="bioRules"
+        label="Bio"
+        counter
+        :maxlength="512"
+      ></v-textarea>
       <div class="d-flex flex-column">
         <v-btn block class="mt-4" color="#ad1d25" @click="submit">
-          Sign Up
+          Update Profile
         </v-btn>
 
         <v-btn block class="mt-4" color="#636161" @click="reset"> Reset</v-btn>
@@ -47,28 +30,26 @@ import axios from "axios";
 import router from "@/router";
 
 export default {
-  name: "SignupPage",
+  name: "EditProfilePage",
 
   data() {
     return {
       valid: true,
-      username: "",
-      usernameRules: [(v) => !!v || "Username is required"],
       displayname: "",
       displaynameRules: [(v) => !!v || "Display Name is required"],
-      password: "",
-      passwordRules: [(v) => !!v || "Password is required"],
-      confirmPassword: "",
+      bio: "",
     };
   },
-
-  computed: {
-    confirmPasswordRules() {
-      return [
-        (v) => !!v || "Confirm Password is required",
-        (v) => v === this.password || "Passwords do not match",
-      ];
-    },
+  created() {
+    axios
+      .get("/api/whoami")
+      .then((response) => {
+        this.displayname = response.data.displayName;
+        this.bio = response.data.bio;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {
@@ -76,16 +57,15 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const user = {
-          username: this.username,
           displayName: this.displayname,
-          password: this.password,
+          bio: this.bio,
         };
         axios
-          .post("/api/create-account", user)
+          .post("/api/edit-profile", user)
           .then(function (response) {
             if (response.data.success) {
               console.log(response);
-              router.push("/login");
+              router.push("/");
             } else {
               console.log(response);
             }
