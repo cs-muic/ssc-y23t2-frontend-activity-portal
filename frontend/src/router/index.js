@@ -8,7 +8,10 @@ import SignupPage from "@/views/SignupPage.vue";
 import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
-
+import EditProfile from "@/views/EditProfile.vue";
+import ChangePassword from "@/views/ChangePassword.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
 /**
  * The route for various paths
  */
@@ -47,6 +50,26 @@ const routes = [
     path: "/create-activity",
     name: "create activity",
     component: ActivityCreatePage,
+  },
+  {
+    path: "/edit-profile",
+    name: "edit-profile",
+    component: EditProfile,
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
+  },
+  {
+    path: "/user/:username",
+    name: "user-profile",
+    component: UserProfile,
+  },
+  {
+    path: "/welcome",
+    name: "welcome",
+    component: UnauthorizedHomePage,
   },
 ];
 
