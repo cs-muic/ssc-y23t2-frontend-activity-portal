@@ -53,6 +53,9 @@
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
               Edit Group
             </v-btn>
+            <v-btn block class="mt-4" color="#ad1d25" @click="deleteGroup">
+              Delete Group
+            </v-btn>
             <v-btn block class="mt-4" color="#636161" @click="reset">
               Reset</v-btn
             >
@@ -121,6 +124,27 @@ export default defineComponent({
             console.log(error);
           });
       }
+    },
+    async deleteGroup() {
+      const group = {
+        id: this.groupID,
+      };
+      axios
+        .post(`/api/group-delete`, group)
+        .then(function (response) {
+          if (response.data.success) {
+            console.log(response);
+            // TODO: route this dynamically
+            router.push(`/group-search`);
+            //   const routeId = this.$route.params.groupID;
+            //   this.$router.push(`/group/${routeId}`);
+          } else {
+            console.log(response);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     reset() {
       this.$refs.form.reset();
