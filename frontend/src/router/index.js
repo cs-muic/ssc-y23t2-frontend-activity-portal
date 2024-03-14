@@ -9,10 +9,12 @@ import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
 import GroupPage from "@/views/GroupPage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
+import UserActivityPage from "@/views/UserActivityPage.vue";
 import EditProfile from "@/views/EditProfile.vue";
 import ChangePassword from "@/views/ChangePassword.vue";
 import UserProfile from "@/views/UserProfile.vue";
 import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
+
 /**
  * The route for various paths
  */
@@ -53,7 +55,16 @@ const routes = [
     component: ActivityCreatePage,
   },
   {
-
+    path: "/user-activities",
+    name: "user activities",
+    component: UserActivityPage,
+  },
+  {
+    path: "/unjoin-activity/:activityID",
+    name: "unjoin activity",
+    component: UserActivityPage,
+  },
+  {
     path: "/edit-profile",
     name: "edit-profile",
     component: EditProfile,
@@ -77,7 +88,6 @@ const routes = [
     path: "/group/:groupID",
     name: "group-page",
     component: GroupPage,
-
   },
 ];
 
