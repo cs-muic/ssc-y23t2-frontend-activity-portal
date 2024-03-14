@@ -15,6 +15,8 @@
                 v-model="groupName"
                 :rules="groupNameRules"
                 label="Group name"
+                counter
+                :maxlength="64"
                 required
               ></v-text-field>
             </v-col>
@@ -36,12 +38,16 @@
             v-model="publicDescription"
             :rules="publicDescriptionRules"
             label="Description"
+            counter
+            :maxlength="256"
           ></v-text-field>
           <v-text-field
             v-if="isPrivate"
             v-model="privateDescription"
             :rules="privateDescriptionRules"
             label="Private Description"
+            counter
+            :maxlength="256"
           ></v-text-field>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">

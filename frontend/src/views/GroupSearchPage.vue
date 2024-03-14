@@ -12,6 +12,16 @@
         >{{ item.id }} <v-icon v-if="item.isPrivate">mdi-lock</v-icon></template
       >
 
+      <template v-slot:[`item.groupName`]="{ item }"
+        >{{ item.groupName.substr(0, 30) }}
+        <!-- Find a way to properly limit the number of character display with ... -->
+      </template>
+
+      <template v-slot:[`item.publicDescription`]="{ item }"
+        >{{ item.publicDescription.substr(0, 30) }}
+        <!-- Find a way to properly limit the number of character display with ... -->
+      </template>
+
       <template v-slot:[`item.viewGroup`]="{ item }"
         ><v-btn block class="mt-1" color="#ad1d25" @click="routeGroup(item.id)">
           Visit

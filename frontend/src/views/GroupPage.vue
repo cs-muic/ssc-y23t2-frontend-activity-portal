@@ -12,6 +12,9 @@
         {{ memberCount }} / {{ maxMember }}
         <h1>{{ publicDescription }}</h1>
         <v-container> {{ privateDescription }} </v-container>
+        <v-btn block class="mt-1" color="#ad1d25" @click="routeGroup()">
+          Edit Group
+        </v-btn>
       </v-container>
     </v-sheet>
   </v-col>
@@ -53,6 +56,10 @@ export default defineComponent({
           console.log(err);
           router.push("/");
         });
+    },
+    routeGroup() {
+      console.log(`/group/${this.groupID}/group-edit`);
+      router.push(`/group/${this.groupID}/group-edit`);
     },
   },
 
