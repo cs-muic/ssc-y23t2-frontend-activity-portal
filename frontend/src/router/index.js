@@ -7,9 +7,13 @@ import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import GroupSearchPage from "@/views/GroupSearchPage.vue";
 import GroupCreatePage from "@/views/GroupCreatePage.vue";
+import GroupPage from "@/views/GroupPage.vue";
 import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
 import UserActivityPage from "@/views/UserActivityPage.vue";
-
+import EditProfile from "@/views/EditProfile.vue";
+import ChangePassword from "@/views/ChangePassword.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
 /**
  * The route for various paths
  */
@@ -58,6 +62,30 @@ const routes = [
     path: "/unjoin-activity/:activityID",
     name: "unjoin activity",
     component: UserActivityPage,
+
+    path: "/edit-profile",
+    name: "edit-profile",
+    component: EditProfile,
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
+  },
+  {
+    path: "/user/:username",
+    name: "user-profile",
+    component: UserProfile,
+  },
+  {
+    path: "/welcome",
+    name: "welcome",
+    component: UnauthorizedHomePage,
+  },
+  {
+    path: "/group/:groupID",
+    name: "group-page",
+    component: GroupPage,
   },
 ];
 
@@ -75,7 +103,12 @@ router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
   let isLoggedIn = store.state.loggedIn;
-  if (to.name !== "login" && to.name !== "signup" && !isLoggedIn)
+  if (
+    to.name !== "login" &&
+    to.name !== "signup" &&
+    to.name !== "welcome" &&
+    !isLoggedIn
+  )
     next({ name: "login" });
   else next();
 });

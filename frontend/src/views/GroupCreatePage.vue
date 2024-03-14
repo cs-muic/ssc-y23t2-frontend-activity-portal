@@ -18,20 +18,30 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" sm="6" md="3">
+            <v-col cols="12" sm="1" md="2">
               <v-text-field
+                v-on:keypress="NumbersOnly"
                 v-model.numbers="maxMember"
                 :rules="maxMemberRules"
                 label="Group size"
+                type="number"
                 required
               ></v-text-field>
             </v-col>
+            <v-col cols="12" sm="3" md="auto">
+              <v-checkbox v-model="isPrivate" label="Private"></v-checkbox>
+            </v-col>
           </v-row>
-          <v-checkbox v-model="isPrivate" label="Private"></v-checkbox>
           <v-text-field
             v-model="publicDescription"
             :rules="publicDescriptionRules"
             label="Description"
+          ></v-text-field>
+          <v-text-field
+            v-if="isPrivate"
+            v-model="privateDescription"
+            :rules="privateDescriptionRules"
+            label="Private Description"
           ></v-text-field>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
@@ -59,11 +69,16 @@ export default defineComponent({
       valid: true,
       groupName: "",
       groupNameRules: [(v) => !!v || "Group name is required!"],
-      maxMember: 0,
-      maxMemberRules: [(v) => !!v || "You must set the group size!"],
+      maxMember: "",
+      maxMemberRules: [
+        (v) =>
+          (!!v && parseInt(v) == v && v >= 2 && v <= 255) ||
+          "The group size must be an integer between 2-255!",
+      ],
       publicDescription: "",
       isPrivate: false,
       publicDescriptionRules: [],
+      privateDescription: "",
     };
   },
   components: {},
@@ -74,7 +89,7 @@ export default defineComponent({
         const group = {
           groupName: this.groupName,
           isPrivate: this.isPrivate,
-          maxMember: this.maxMember,
+          maxMember: parseInt(this.maxMember),
           publicDescription: this.publicDescription,
           privateDescription: this.privateDescription,
           ownerID: this.$store.state.userID,
