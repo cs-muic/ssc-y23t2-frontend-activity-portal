@@ -14,6 +14,7 @@ import EditProfile from "@/views/EditProfile.vue";
 import ChangePassword from "@/views/ChangePassword.vue";
 import UserProfile from "@/views/UserProfile.vue";
 import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
+
 /**
  * The route for various paths
  */
@@ -62,7 +63,8 @@ const routes = [
     path: "/unjoin-activity/:activityID",
     name: "unjoin activity",
     component: UserActivityPage,
-
+  },
+  {
     path: "/edit-profile",
     name: "edit-profile",
     component: EditProfile,
