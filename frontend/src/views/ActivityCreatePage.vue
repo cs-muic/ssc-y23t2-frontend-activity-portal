@@ -16,6 +16,7 @@
                 <v-col cols="6">
                   <VueCtkDateTimePicker
                     v-model="activity.start_time"
+                    :min-date="minDate"
                     label="Start Time"
                     dark
                     required
@@ -57,12 +58,14 @@
 <script>
 import axios from "axios";
 import router from "@/router";
+import moment from "moment";
 
 export default {
   name: "ActivityCreatePage",
 
   data() {
     return {
+      minDate: moment().format("YYYY-MM-DD hh:mm a'"),
       valid: true,
       activity: {
         name: "",
@@ -73,10 +76,7 @@ export default {
         description: "",
       },
       nameRules: [(v) => !!v || "Name is required"],
-      startTimeRules: [
-        (v) => !!v || "Start Time is required",
-        () => this.startTimeNotEarlierToday,
-      ],
+      startTimeRules: [(v) => !!v || "Start Time is required"],
       endTimeRules: [
         (v) => !!v || "End Time is required",
         () => this.endTimeNotEarlier,
@@ -86,15 +86,6 @@ export default {
   },
 
   computed: {
-    startTimeNotEarlierToday() {
-      let now = new Date();
-      now.setHours(0, 0, 0, 0);
-      return (
-        !this.activity.start_time ||
-        new Date(this.activity.start_time) >= now ||
-        "Start Time cannot be earlier than today"
-      );
-    },
     endTimeNotEarlier() {
       return (
         !this.activity.end_time ||
