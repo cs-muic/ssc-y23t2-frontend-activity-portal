@@ -132,20 +132,19 @@ export default defineComponent({
           if (!response.data) {
             console.log("This group does not exist!");
             router.push("/");
-          }
-          if (!(response.data.ownerID == this.$store.state.userID)) {
+          } else if (!(response.data.ownerID == this.$store.state.userID)) {
             console.log("Wrong Authentication!");
             router.push("/");
+          } else {
+            console.log(response.data);
+            this.data = response.data;
+            this.groupID = this.data.id;
+            this.groupName = this.data.groupName;
+            this.isPrivate = this.data.isPrivate;
+            this.ownerID = this.data.ownerID;
+            this.privateDescription = this.data.privateDescription;
+            this.publicDescription = this.data.publicDescription;
           }
-
-          console.log(response.data);
-          this.data = response.data;
-          this.groupID = this.data.id;
-          this.groupName = this.data.groupName;
-          this.isPrivate = this.data.isPrivate;
-          this.ownerID = this.data.ownerID;
-          this.privateDescription = this.data.privateDescription;
-          this.publicDescription = this.data.publicDescription;
         })
         .catch((err) => {
           // alert(err);
