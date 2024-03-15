@@ -4,7 +4,7 @@
       <h1>Group List</h1>
     </center>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="data">
+    <v-data-table :headers="headers" :items="groupList">
       <template v-slot:[`item.memberCount`]="{ item }"
         >{{ item.memberCount }} / {{ item.maxMember }}</template
       >
@@ -47,6 +47,9 @@ export default defineComponent({
         .get("/api/group-search/fetch-all-groups")
         .then((response) => {
           this.data = response.data;
+          this.groupList = this.data.group;
+          this.message = this.data.message;
+          this.success = this.data.success;
           console.log(response.data);
         })
         .catch((err) => alert(err));
@@ -68,7 +71,10 @@ export default defineComponent({
         { title: "Description", key: "publicDescription" },
         { title: "View Group", key: "viewGroup" },
       ],
-      data: [],
+      groupList: [],
+      message: "",
+      success: "",
+      data: "",
     };
   },
 

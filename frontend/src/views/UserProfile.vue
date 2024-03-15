@@ -40,8 +40,8 @@ export default {
       .get(`/api/user/${username}`)
       .then((response) => {
         console.log(response.data);
-        this.displayname = response.data.displayName;
-        this.bio = response.data.bio;
+        this.displayname = response.data.user.displayName;
+        this.bio = response.data.user.bio;
       })
       .catch((error) => {
         console.log(error);
