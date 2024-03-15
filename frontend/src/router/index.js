@@ -101,6 +101,8 @@ const routes = [
     path: "/group/:groupID/group-edit",
     name: "group-edit",
     component: GroupEditPage,
+  },
+  {
     path: "/group-activities",
     name: "group-activities",
     component: GroupActivityPage,
