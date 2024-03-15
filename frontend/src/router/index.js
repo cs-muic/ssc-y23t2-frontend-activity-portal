@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/common/HomeView.vue";
 import axios from "axios";
 import store from "@/store";
+
 import AboutView from "@/views/common/AboutView.vue";
 import LoginPage from "@/views/common/LoginPage.vue";
 import SignupPage from "@/views/profile/SignupPage.vue";
