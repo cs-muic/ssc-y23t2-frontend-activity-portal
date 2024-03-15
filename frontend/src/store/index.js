@@ -9,6 +9,7 @@ export default createStore({
     username: null,
     displayName: null,
     role: "",
+    userID: null,
   },
   getters: {},
   mutations: {
@@ -18,6 +19,7 @@ export default createStore({
       state.username = payload.username;
       state.displayName = payload.displayName;
       state.role = payload.role;
+      state.userID = payload.userID;
     },
     //clearing the current user
     clearUser: function (state) {
@@ -25,6 +27,7 @@ export default createStore({
       state.username = null;
       state.name = null;
       state.role = "";
+      state.userID = null;
     },
   },
   actions: {},

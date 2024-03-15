@@ -6,7 +6,16 @@ import AboutView from "@/views/AboutView.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SignupPage from "@/views/SignupPage.vue";
 import WebsocketDemo from "@/views/StompDemo.vue";
-
+import GroupSearchPage from "@/views/GroupSearchPage.vue";
+import GroupCreatePage from "@/views/GroupCreatePage.vue";
+import GroupPage from "@/views/GroupPage.vue";
+import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
+import UserActivityPage from "@/views/UserActivityPage.vue";
+import EditProfile from "@/views/EditProfile.vue";
+import ChangePassword from "@/views/ChangePassword.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
+import GroupEditPage from "@/views/GroupEditPage.vue";
 /**
  * The route for various paths
  */
@@ -36,6 +45,61 @@ const routes = [
     name: "signup",
     component: SignupPage,
   },
+  {
+    path: "/group-search",
+    name: "group-search",
+    component: GroupSearchPage,
+  },
+  {
+    path: "/group-create",
+    name: "group-create",
+    component: GroupCreatePage,
+  },
+  {
+    path: "/create-activity",
+    name: "create activity",
+    component: ActivityCreatePage,
+  },
+  {
+    path: "/user-activities",
+    name: "user activities",
+    component: UserActivityPage,
+  },
+  {
+    path: "/unjoin-activity/:activityID",
+    name: "unjoin activity",
+    component: UserActivityPage,
+  },
+  {
+    path: "/edit-profile",
+    name: "edit-profile",
+    component: EditProfile,
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
+  },
+  {
+    path: "/user/:username",
+    name: "user-profile",
+    component: UserProfile,
+  },
+  {
+    path: "/welcome",
+    name: "welcome",
+    component: UnauthorizedHomePage,
+  },
+  {
+    path: "/group/:groupID",
+    name: "group-page",
+    component: GroupPage,
+  },
+  {
+    path: "/group/:groupID/group-edit",
+    name: "group-edit",
+    component: GroupEditPage,
+  },
 ];
 
 const router = createRouter({
@@ -52,7 +116,12 @@ router.beforeEach(async (to, from, next) => {
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
   let isLoggedIn = store.state.loggedIn;
-  if (to.name !== "login" && to.name !== "signup" && !isLoggedIn)
+  if (
+    to.name !== "login" &&
+    to.name !== "signup" &&
+    to.name !== "welcome" &&
+    !isLoggedIn
+  )
     next({ name: "login" });
   else next();
 });
