@@ -12,8 +12,11 @@
         {{ memberCount }} / {{ maxMember }}
         <h1>{{ publicDescription }}</h1>
         <v-container> {{ privateDescription }} </v-container>
-        <v-btn block class="mt-1" color="#ad1d25" @click="routeGroup()">
+        <v-btn block class="mt-1" color="#ad1d25" @click="routeEditGroup()">
           Edit Group
+        </v-btn>
+        <v-btn block class="mt-1" color="#ad1d25" @click="joinGroup()">
+          Join Group
         </v-btn>
       </v-container>
     </v-sheet>
@@ -23,6 +26,12 @@
 import { defineComponent } from "vue";
 import axios from "axios";
 import router from "@/router";
+
+/**
+ * TODO:
+ * - Check if user alr joined group then turn join button to leave button
+ * - Disable edit button for non-admin
+ */
 
 // Components
 export default defineComponent({
@@ -57,9 +66,27 @@ export default defineComponent({
           router.push("/");
         });
     },
-    routeGroup() {
+    routeEditGroup() {
       console.log(`/group/${this.groupID}/group-edit`);
       router.push(`/group/${this.groupID}/group-edit`);
+    },
+    joinGroup() {
+      console.log(`/api/group-join/${this.groupID}`);
+      axios
+        .post(`/api/group-join/${this.groupID}`)
+        .then(function (response) {
+          if (response.data.success) {
+            console.log(response);
+            // TODO: route this to force refresh page
+            //   const routeId = this.$route.params.groupID;
+            //   this.$router.push(`/group/${routeId}`);
+          } else {
+            console.log(response);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 
