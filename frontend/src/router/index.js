@@ -115,6 +115,11 @@ const routes = [
     name: "edit-activity",
     component: ActivityEditPage,
   },
+  {
+    path: "/group-activities",
+    name: "group-activities",
+    component: GroupActivityPage,
+  },
 ];
 
 const router = createRouter({
