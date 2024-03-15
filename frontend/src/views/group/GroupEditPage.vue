@@ -162,12 +162,12 @@ export default defineComponent({
           } else {
             console.log(response.data);
             this.data = response.data;
-            this.groupID = this.data.id;
-            this.groupName = this.data.groupName;
-            this.isPrivate = this.data.isPrivate;
-            this.ownerID = this.data.ownerID;
-            this.privateDescription = this.data.privateDescription;
-            this.publicDescription = this.data.publicDescription;
+            this.groupID = response.data.id;
+            this.groupName = response.data.groupName;
+            this.isPrivate = response.data.isPrivate;
+            this.ownerID = response.data.ownerID;
+            this.privateDescription = response.data.privateDescription;
+            this.publicDescription = response.data.publicDescription;
           }
         })
         .catch((err) => {

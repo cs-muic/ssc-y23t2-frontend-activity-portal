@@ -1,21 +1,21 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/common/HomeView.vue";
 import axios from "axios";
 import store from "@/store";
-import AboutView from "@/views/AboutView.vue";
-import LoginPage from "@/views/LoginPage.vue";
-import SignupPage from "@/views/SignupPage.vue";
-import WebsocketDemo from "@/views/StompDemo.vue";
-import GroupSearchPage from "@/views/GroupSearchPage.vue";
-import GroupCreatePage from "@/views/GroupCreatePage.vue";
-import GroupPage from "@/views/GroupPage.vue";
-import ActivityCreatePage from "@/views/ActivityCreatePage.vue";
-import UserActivityPage from "@/views/UserActivityPage.vue";
-import EditProfile from "@/views/EditProfile.vue";
-import ChangePassword from "@/views/ChangePassword.vue";
-import UserProfile from "@/views/UserProfile.vue";
-import UnauthorizedHomePage from "@/views/UnauthorizedHomePage.vue";
-import GroupEditPage from "@/views/GroupEditPage.vue";
+import AboutView from "@/views/common/AboutView.vue";
+import LoginPage from "@/views/common/LoginPage.vue";
+import SignupPage from "@/views/profile/SignupPage.vue";
+import WebsocketDemo from "@/views/websocket/StompDemo.vue";
+import GroupSearchPage from "@/views/group/GroupSearchPage.vue";
+import GroupCreatePage from "@/views/group/GroupCreatePage.vue";
+import GroupPage from "@/views/group/GroupPage.vue";
+import ActivityCreatePage from "@/views/activity/ActivityCreatePage.vue";
+import UserActivityPage from "@/views/profile/UserActivityPage.vue";
+import EditProfile from "@/views/profile/EditProfile.vue";
+import ChangePassword from "@/views/profile/ChangePassword.vue";
+import UserProfile from "@/views/profile/UserProfile.vue";
+import UnauthorizedHomePage from "@/views/common/UnauthorizedHomePage.vue";
+import GroupEditPage from "@/views/group/GroupEditPage.vue";
 /**
  * The route for various paths
  */
