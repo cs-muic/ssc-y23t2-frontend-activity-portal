@@ -17,6 +17,7 @@ import ChangePassword from "@/views/profile/ChangePassword.vue";
 import UserProfile from "@/views/profile/UserProfile.vue";
 import UnauthorizedHomePage from "@/views/common/UnauthorizedHomePage.vue";
 import GroupEditPage from "@/views/group/GroupEditPage.vue";
+import GroupActivityPage from "@/views/activity/GroupActivityPage.vue";
 
 /**
  * The route for various paths
@@ -57,11 +58,7 @@ const routes = [
     name: "group-create",
     component: GroupCreatePage,
   },
-  {
-    path: "/create-activity",
-    name: "create activity",
-    component: ActivityCreatePage,
-  },
+
   {
     path: "/user-activities",
     name: "user activities",
@@ -103,7 +100,12 @@ const routes = [
     component: GroupEditPage,
   },
   {
-    path: "/group-activities",
+    path: "/group/:groupID/activity-create",
+    name: "create activity",
+    component: ActivityCreatePage,
+  },
+  {
+    path: "/group/:groupID/group-activities",
     name: "group-activities",
     component: GroupActivityPage,
   },

@@ -108,7 +108,7 @@ export default {
           description: this.activity.description,
         };
         axios
-          .post("/api/create-activity", activity)
+          .post(`/api/${this.$route.params.groupID}/activity-create`, activity)
           .then(function (response) {
             if (response.data.success) {
               console.log(response);
@@ -121,6 +121,9 @@ export default {
             console.log(error);
           });
       }
+    },
+    mounted() {
+      this.getGroupInfo();
     },
     reset() {
       this.$refs.form.reset();
