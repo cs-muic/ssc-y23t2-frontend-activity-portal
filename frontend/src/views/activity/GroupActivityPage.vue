@@ -5,9 +5,6 @@
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     <v-data-table :headers="headers" :items="activities">
-      <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="editActivity(item.id)" color="error">Edit</v-btn>
-      </template>
       <!--      <template v-slot:[`item.action`]="{ item }">-->
       <!--        <v-btn @click="unjoinActivity(item.id)" color="error"> Unjoin</v-btn>-->
       <!--      </template>-->
