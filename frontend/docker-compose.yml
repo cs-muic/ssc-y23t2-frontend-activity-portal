@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: 'jorntumrongwit/activity-portal-frontend'
+    build:
+      context: .
+    container_name: frontend
+    environment:
+      - VUE_API_URL=http://backend:8081
+    ports:
+      - "80:80"
+    networks:
+      - webapp-network
+networks:
+  webapp-network:
+    external: true

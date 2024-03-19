@@ -9,7 +9,8 @@ module.exports = defineConfig({
     proxy: {
       //api will get proxy to the correct port of 8081
       // ALL API PATH MUST START WITH /api
-      "/api": { target: "http://localhost:8081" },
+      // THIS IS THE PATH TO THE DEPLOYED BACKEND
+      "/api": { target: process.env.VUE_API_URL },
     },
     headers: {
       // typical header settings
