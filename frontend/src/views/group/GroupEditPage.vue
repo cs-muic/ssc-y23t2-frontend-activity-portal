@@ -153,21 +153,22 @@ export default defineComponent({
       axios
         .get(`/api/group-search/${this.$route.params.groupID}`)
         .then((response) => {
-          if (!response.data) {
+          if (!response.data.success) {
             console.log("This group does not exist!");
             router.push("/");
-          } else if (!(response.data.ownerID == this.$store.state.userID)) {
+          } else if (
+            !(response.data.group.ownerID == this.$store.state.userID)
+          ) {
             console.log("Wrong Authentication!");
             router.push("/");
           } else {
-            console.log(response.data);
             this.data = response.data;
-            this.groupID = response.data.id;
-            this.groupName = response.data.groupName;
-            this.isPrivate = response.data.isPrivate;
-            this.ownerID = response.data.ownerID;
-            this.privateDescription = response.data.privateDescription;
-            this.publicDescription = response.data.publicDescription;
+            this.groupID = response.data.group.id;
+            this.groupName = response.data.group.groupName;
+            this.isPrivate = response.data.group.isPrivate;
+            this.ownerID = response.data.group.ownerID;
+            this.privateDescription = response.data.group.privateDescription;
+            this.publicDescription = response.data.group.publicDescription;
           }
         })
         .catch((err) => {

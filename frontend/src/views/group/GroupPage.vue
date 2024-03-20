@@ -63,13 +63,13 @@ export default defineComponent({
         });
     },
     routeEditGroup() {
-      console.log(`/group/${this.group.groupID}/group-edit`);
-      router.push(`/group/${this.group.groupID}/group-edit`);
+      console.log(`/group/${this.group.id}/group-edit`);
+      router.push(`/group/${this.group.id}/group-edit`);
     },
     joinGroup() {
-      console.log(`/api/group-join/${this.group.groupID}`);
+      console.log(`/api/group-join/${this.group.id}`);
       axios
-        .post(`/api/group-join/${this.group.groupID}`)
+        .post(`/api/group-join/${this.group.id}`)
         .then(function (response) {
           if (response.data.success) {
             console.log(response);
