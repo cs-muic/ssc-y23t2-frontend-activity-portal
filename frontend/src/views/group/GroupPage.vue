@@ -3,7 +3,7 @@
     <v-container>
       <center>
         <h1>{{ group.groupName }}</h1>
-        {{ group.groupID }}
+        {{ group.id }}
       </center>
       <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     </v-container>
