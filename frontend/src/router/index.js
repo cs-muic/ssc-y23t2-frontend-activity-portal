@@ -18,6 +18,7 @@ import UserProfile from "@/views/profile/UserProfile.vue";
 import UnauthorizedHomePage from "@/views/common/UnauthorizedHomePage.vue";
 import GroupEditPage from "@/views/group/GroupEditPage.vue";
 import GroupActivityPage from "@/views/activity/GroupActivityPage.vue";
+import ActivityEditPage from "@/views/activity/ActivityEditPage.vue";
 
 /**
  * The route for various paths
@@ -108,6 +109,11 @@ const routes = [
     path: "/group/:groupID/group-activities",
     name: "group-activities",
     component: GroupActivityPage,
+  },
+  {
+    path: "/group/:groupID/edit-activity/:activityID",
+    name: "edit-activity",
+    component: ActivityEditPage,
   },
 ];
 
