@@ -46,14 +46,15 @@ export default defineComponent({
         .get(`/api/group-search/${this.$route.params.groupID}`)
         .then((response) => {
           console.log(response.data);
-          if (!response.data) {
+          if (response.data.success) {
+            this.data = response.data;
+            this.group = this.data.group;
+            this.message = this.data.message;
+            this.success = this.data.success;
+          } else {
             console.log("This group does not exist!");
             router.push("/");
           }
-          this.data = response.data;
-          this.group = this.data.group;
-          this.message = this.data.message;
-          this.success = this.data.success;
         })
         .catch((err) => {
           // alert(err);
