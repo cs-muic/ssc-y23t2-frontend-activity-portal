@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/common/HomeView.vue";
 import axios from "axios";
 import store from "@/store";
+
 import AboutView from "@/views/common/AboutView.vue";
 import LoginPage from "@/views/common/LoginPage.vue";
 import SignupPage from "@/views/profile/SignupPage.vue";
@@ -16,6 +17,9 @@ import ChangePassword from "@/views/profile/ChangePassword.vue";
 import UserProfile from "@/views/profile/UserProfile.vue";
 import UnauthorizedHomePage from "@/views/common/UnauthorizedHomePage.vue";
 import GroupEditPage from "@/views/group/GroupEditPage.vue";
+import GroupActivityPage from "@/views/activity/GroupActivityPage.vue";
+import ActivityEditPage from "@/views/activity/ActivityEditPage.vue";
+
 /**
  * The route for various paths
  */
@@ -55,11 +59,7 @@ const routes = [
     name: "group-create",
     component: GroupCreatePage,
   },
-  {
-    path: "/create-activity",
-    name: "create activity",
-    component: ActivityCreatePage,
-  },
+
   {
     path: "/user-activities",
     name: "user activities",
@@ -99,6 +99,21 @@ const routes = [
     path: "/group/:groupID/group-edit",
     name: "group-edit",
     component: GroupEditPage,
+  },
+  {
+    path: "/group/:groupID/activity-create",
+    name: "create activity",
+    component: ActivityCreatePage,
+  },
+  {
+    path: "/group/:groupID/group-activities",
+    name: "group-activities",
+    component: GroupActivityPage,
+  },
+  {
+    path: "/group/:groupID/edit-activity/:activityID",
+    name: "edit-activity",
+    component: ActivityEditPage,
   },
 ];
 
