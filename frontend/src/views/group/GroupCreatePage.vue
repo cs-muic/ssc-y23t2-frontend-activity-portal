@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <center>
-      <h1>Create Group</h1>
-    </center>
+    <h1 class="text-center">Create Group</h1>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
   </v-container>
   <v-col align-self="center">
@@ -49,6 +47,35 @@
             counter
             :maxlength="256"
           ></v-text-field>
+          <v-text-field
+            v-model="tagInfo.gameName"
+            label="Game Name"
+            :rules="gameNameRules"
+            counter
+            :maxlength="64"
+            required
+          ></v-text-field>
+          <v-select
+            v-model="tagInfo.region"
+            :items="regions"
+            label="Region"
+          ></v-select>
+          <v-select
+            v-model="tagInfo.language"
+            :items="languages"
+            label="Language"
+          ></v-select>
+          <v-select
+            v-model="tagInfo.playStyle"
+            :items="playStyles"
+            label="Play Style"
+            required
+          ></v-select>
+          <v-select
+            v-model="tagInfo.skillLevel"
+            :items="skillLevels"
+            label="Skill Level"
+          ></v-select>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
               Create Group
@@ -85,10 +112,45 @@ export default defineComponent({
       isPrivate: false,
       publicDescriptionRules: [],
       privateDescription: "",
+      tagInfo: {
+        gameName: "",
+        region: "",
+        language: "",
+        playStyle: "",
+        skillLevel: "",
+      },
+      gameNameRules: [(v) => !!v || "Game name is required!"],
+      regions: [
+        "North America",
+        "Europe",
+        "Asia",
+        "Oceania",
+        "South America",
+        "Africa",
+      ],
+      languages: [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Chinese (Mandarin)",
+        "Chinese (Cantonese)",
+        "Japanese",
+        "Thai",
+        "Hindi",
+        "etc.",
+      ],
+      playStyles: ["Casual", "Competitive"],
+      skillLevels: ["Beginner", "Intermediate", "Advanced", "Expert", "Pro"],
     };
   },
   components: {},
   methods: {
+    NumbersOnly(event) {
+      if (!/[0-9]/.test(event.key)) {
+        event.preventDefault();
+      }
+    },
     async submit() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
@@ -99,6 +161,7 @@ export default defineComponent({
           publicDescription: this.publicDescription,
           privateDescription: this.privateDescription,
           ownerID: this.$store.state.userID,
+          tagInfo: JSON.stringify(this.tagInfo),
         };
         console.log(group);
         axios
