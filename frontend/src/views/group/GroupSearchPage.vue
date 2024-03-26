@@ -1,11 +1,21 @@
 <template>
   <v-container>
-    <center>
-      <h1>Group List</h1>
-    </center>
+    <h1 class="text-center">Group List</h1>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
 
     <v-data-table :headers="headers" :items="groupList" :search="search">
+      <template v-slot:[`item.tags`]="{ item }">
+        <v-chip
+          v-for="(value, key) in filteredTags(item)"
+          :key="key"
+          color="red"
+          class="ma-1"
+          small
+        >
+          <v-icon left>mdi-label</v-icon>
+          {{ value }}
+        </v-chip>
+      </template>
       <template v-slot:top>
         <v-divider :thickness="10" class="border-opacity-0"></v-divider>
         <v-text-field
@@ -61,7 +71,10 @@ export default defineComponent({
         .get("/api/group-search/fetch-all-groups")
         .then((response) => {
           this.data = response.data;
-          this.groupList = this.data.group;
+          this.groupList = this.data.group.map((group) => {
+            group.tagInfo = JSON.parse(group.tagInfo);
+            return group;
+          });
           this.message = this.data.message;
           this.success = this.data.success;
           console.log(response.data);
@@ -80,6 +93,19 @@ export default defineComponent({
     },
   },
 
+  computed: {
+    filteredTags() {
+      return function (item) {
+        return Object.entries(item.tagInfo).reduce((acc, [key, value]) => {
+          if (value) {
+            acc[key] = value;
+          }
+          return acc;
+        }, {});
+      };
+    },
+  },
+
   data() {
     return {
       search: "",
@@ -89,6 +115,7 @@ export default defineComponent({
         { title: "members", key: "memberCount" },
         { title: "Owner", key: "ownerID" }, // Maybe change this field to owner name
         { title: "Description", key: "publicDescription" },
+        { title: "Tags", key: "tags" },
         { title: "View Group", key: "viewGroup" },
       ],
       groupList: [],
