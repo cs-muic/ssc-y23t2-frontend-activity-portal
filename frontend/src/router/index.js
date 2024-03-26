@@ -59,11 +59,7 @@ const routes = [
     name: "group-create",
     component: GroupCreatePage,
   },
-  {
-    path: "/create-activity",
-    name: "create activity",
-    component: ActivityCreatePage,
-  },
+
   {
     path: "/user-activities",
     name: "user activities",
@@ -155,11 +151,6 @@ const routes = [
     path: "/group/:groupID/edit-activity/:activityID",
     name: "edit-activity",
     component: ActivityEditPage,
-  },
-  {
-    path: "/group-activities",
-    name: "group-activities",
-    component: GroupActivityPage,
   },
 ];
 
