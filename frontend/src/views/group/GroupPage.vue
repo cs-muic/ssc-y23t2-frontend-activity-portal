@@ -18,6 +18,9 @@
         <v-btn block class="mt-1" color="#ad1d25" @click="joinGroup()">
           Join Group
         </v-btn>
+        <v-btn block class="mt-1" color="#ad1d25" @click="leaveGroup()">
+          Leave Group
+        </v-btn>
       </v-container>
     </v-sheet>
   </v-col>
@@ -70,6 +73,24 @@ export default defineComponent({
       console.log(`/api/group-join/${this.group.id}`);
       axios
         .post(`/api/group-join/${this.group.id}`)
+        .then(function (response) {
+          if (response.data.success) {
+            console.log(response);
+            // TODO: route this to force refresh page
+            //   const routeId = this.$route.params.groupID;
+            //   this.$router.push(`/group/${routeId}`);
+          } else {
+            console.log(response);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    leaveGroup() {
+      console.log(`/api/group-leave/${this.group.id}`);
+      axios
+        .post(`/api/group-leave/${this.group.id}`)
         .then(function (response) {
           if (response.data.success) {
             console.log(response);
