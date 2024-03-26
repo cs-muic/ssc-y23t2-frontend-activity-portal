@@ -4,7 +4,21 @@
       <h1>Group List</h1>
     </center>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="groupList">
+
+    <v-data-table :headers="headers" :items="groupList" :search="search">
+      <template v-slot:top>
+        <v-divider :thickness="10" class="border-opacity-0"></v-divider>
+        <v-text-field
+          class="mx-auto w-75"
+          v-model="search"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          hide-details
+          single-line
+        ></v-text-field>
+        <v-divider :thickness="10" class="border-opacity-0"></v-divider>
+      </template>
       <template v-slot:[`item.memberCount`]="{ item }"
         >{{ item.memberCount }} / {{ item.maxMember }}</template
       >
@@ -59,10 +73,16 @@ export default defineComponent({
       console.log(`/group/${groupID}`);
       router.push(`/group/${groupID}`);
     },
+
+    idNameFilter(items, search, filter) {
+      search = search.toString().toLowerCase();
+      return items.filter((row) => filter(row["groupName,id"], search));
+    },
   },
 
   data() {
     return {
+      search: "",
       headers: [
         { title: "#", key: "id" },
         { title: "Group name", key: "groupName" },
