@@ -5,9 +5,13 @@ services:
       context: .
     container_name: frontend
     environment:
-      - VUE_API_URL=http://backend:8081
+      - VUE_API_URL=https://act-portal.64-ssc.com
+      - VIRTUAL_HOST=act-portal.64-ssc.com
+      - LETSENCRYPT_HOST=act-portal.64-ssc.com
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - webapp-network
 networks:
