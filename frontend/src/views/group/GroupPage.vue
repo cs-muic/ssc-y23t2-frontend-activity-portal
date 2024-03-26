@@ -12,13 +12,31 @@
         {{ group.memberCount }} / {{ group.maxMember }}
         <h1>{{ group.publicDescription }}</h1>
         <v-container> {{ group.privateDescription }} </v-container>
-        <v-btn block class="mt-1" color="#ad1d25" @click="routeEditGroup()">
+        <v-btn
+          block
+          v-if="this.isOwner"
+          class="mt-1"
+          color="#ad1d25"
+          @click="routeEditGroup()"
+        >
           Edit Group
         </v-btn>
-        <v-btn block class="mt-1" color="#ad1d25" @click="joinGroup()">
+        <v-btn
+          block
+          v-if="!this.isMember"
+          class="mt-1"
+          color="#ad1d25"
+          @click="joinGroup()"
+        >
           Join Group
         </v-btn>
-        <v-btn block class="mt-1" color="#ad1d25" @click="leaveGroup()">
+        <v-btn
+          block
+          v-if="this.isMember"
+          class="mt-1"
+          color="#ad1d25"
+          @click="leaveGroup()"
+        >
           Leave Group
         </v-btn>
       </v-container>
@@ -61,6 +79,26 @@ export default defineComponent({
         })
         .catch((err) => {
           // alert(err);
+          console.log(err);
+          router.push("/");
+        });
+    },
+    getGroupRole() {
+      axios
+        .get(`/api/get-group-role/${this.$route.params.groupID}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            this.data = response.data;
+            this.isOwner = this.data.owner;
+            this.isMember = this.data.member;
+            this.success = this.data.success;
+          } else {
+            console.log("Cannot fetch your role in this group!");
+            router.push("/");
+          }
+        })
+        .catch((err) => {
           console.log(err);
           router.push("/");
         });
@@ -112,11 +150,14 @@ export default defineComponent({
       group: "",
       message: "",
       success: "",
+      isOwner: this.isOwner,
+      isMember: this.isMember,
     };
   },
 
   mounted() {
     this.getGroupInfo();
+    this.getGroupRole();
   },
 });
 </script>
