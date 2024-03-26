@@ -51,14 +51,14 @@ import router from "@/router";
 
 // Components
 export default defineComponent({
-  name: "GroupSearchPage",
+  name: "UserGroupPage",
 
   components: {},
 
   methods: {
     getAllSearch() {
       return axios
-        .get("/api/group-search/fetch-all-groups")
+        .get("/api/fetch-my-groups")
         .then((response) => {
           this.data = response.data;
           this.groupList = this.data.group;

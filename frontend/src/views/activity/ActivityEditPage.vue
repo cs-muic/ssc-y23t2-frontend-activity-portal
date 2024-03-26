@@ -5,7 +5,7 @@
         <v-sheet class="mx-auto" width="1000">
           <v-card-text>
             <v-form ref="form">
-              <h1 class="text-center">Create Activity</h1>
+              <h1 class="text-center">Edit Activity:</h1>
               <v-text-field
                 v-model="activity.name"
                 label="Name"
@@ -61,7 +61,7 @@ import router from "@/router";
 import moment from "moment";
 
 export default {
-  name: "ActivityCreatePage",
+  name: "ActivityEditPage",
 
   data() {
     return {
@@ -108,7 +108,10 @@ export default {
           description: this.activity.description,
         };
         axios
-          .post(`/api/${this.$route.params.groupID}/activity-create`, activity)
+          .put(
+            `api/${this.$route.params.groupID}/activity-edit/${this.route.params.activityID}`,
+            activity
+          )
           .then(function (response) {
             if (response.data.success) {
               console.log(response);
@@ -122,12 +125,28 @@ export default {
           });
       }
     },
-    mounted() {
-      this.getGroupInfo();
+    async getActivityInfo() {
+      try {
+        const response = await axios.get(
+          `/api/${this.$route.params.activityID}/activity`
+        );
+        if (response.data) {
+          this.activity = response.data;
+        } else {
+          console.log("This activity does not exist!");
+          router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+        router.push("/");
+      }
     },
-    reset() {
-      this.$refs.form.reset();
-    },
+  },
+  mounted() {
+    this.getActivityInfo();
+  },
+  reset() {
+    this.$refs.form.reset();
   },
 };
 </script>
