@@ -11,7 +11,9 @@
       <v-container class="mx-auto w-65 h-40">
         {{ group.memberCount }} / {{ group.maxMember }}
         <h1>{{ group.publicDescription }}</h1>
-        <v-container> {{ group.privateDescription }} </v-container>
+        <v-container v-if="this.isMember">
+          {{ group.privateDescription }}
+        </v-container>
         <v-btn
           block
           v-if="this.isOwner"
@@ -23,7 +25,7 @@
         </v-btn>
         <v-btn
           block
-          v-if="!this.isMember"
+          v-if="!this.isMember && !this.isOwner"
           class="mt-1"
           color="#ad1d25"
           @click="joinGroup()"
@@ -32,7 +34,7 @@
         </v-btn>
         <v-btn
           block
-          v-if="this.isMember"
+          v-if="this.isMember && !this.isOwner"
           class="mt-1"
           color="#ad1d25"
           @click="leaveGroup()"
