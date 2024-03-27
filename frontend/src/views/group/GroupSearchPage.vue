@@ -42,18 +42,37 @@
             <v-card-title class="headline">Filter by Tags</v-card-title>
             <v-card-text>
               <v-chip-group v-model="selectedTags" column multiple>
-                <v-chip
-                  v-for="(tag, i) in tags"
-                  :key="i"
-                  color="red"
-                  class="ma-1"
-                  small
-                  :value="tag"
-                  filter
+                <div
+                  v-for="(tags, category) in categorizedTags"
+                  :key="category"
+                  style="padding: 0 10px; ,max-width: 200px; overflow: auto"
                 >
-                  <v-icon left>mdi-label</v-icon>
-                  {{ tag }}
-                </v-chip>
+                  {{ categoryNames[category] }}
+                  <div>
+                    <hr
+                      style="
+                        width: 520px;
+                        border: none;
+                        border-top: 1px solid white;
+                        margin: 0 auto 13px;
+                      "
+                    />
+                  </div>
+                  <div>
+                    <v-chip
+                      v-for="(tag, i) in tags"
+                      :key="i"
+                      color="red"
+                      class="ma-1"
+                      small
+                      :value="tag"
+                      filter
+                    >
+                      <v-icon left>mdi-label</v-icon>
+                      {{ tag }}
+                    </v-chip>
+                  </div>
+                </div>
               </v-chip-group>
             </v-card-text>
             <v-card-actions>
@@ -61,6 +80,7 @@
               <v-btn color="green darken-1" text @click="filterByTags"
                 >Filter</v-btn
               >
+              <v-btn color="blue darken-1" text @click="resetAll">Reset</v-btn>
               <v-btn color="#b01c24" text @click="dialog = false">Close</v-btn>
             </v-card-actions>
           </v-card>
@@ -138,24 +158,23 @@ export default defineComponent({
       return items.filter((row) => filter(row["groupName,id"], search));
     },
 
+    resetAll() {
+      this.selectedTags = [];
+      this.getAllSearch();
+      this.dialog = false;
+    },
+
     async filterByTags() {
       await this.getAllSearch();
       const selectedTagsArray = JSON.parse(JSON.stringify(this.selectedTags));
 
       this.groupList = this.groupList.filter((group) => {
         const groupTags = this.filteredTags(group);
-        console.log("selectedTags:", selectedTagsArray);
-        console.log("groupTags:", groupTags);
 
-        const condition = selectedTagsArray.every((tag) =>
+        return selectedTagsArray.every((tag) =>
           Object.values(groupTags).includes(tag)
         );
-        console.log("Condition:", condition);
-
-        return condition;
       });
-      console.log("Filtered groups:", this.groupList);
-
       this.dialog = false;
     },
   },
@@ -170,6 +189,23 @@ export default defineComponent({
           return acc;
         }, {});
       };
+    },
+
+    categorizedTags() {
+      return this.groupList.reduce((categories, group) => {
+        Object.entries(group.tagInfo).forEach(([category, tag]) => {
+          if (tag) {
+            if (!categories[category]) {
+              categories[category] = [];
+            }
+            if (!categories[category].includes(tag)) {
+              categories[category].push(tag);
+            }
+          }
+        });
+
+        return categories;
+      }, {});
     },
   },
 
@@ -190,6 +226,13 @@ export default defineComponent({
       success: "",
       data: "",
       selectedTags: [],
+      categoryNames: {
+        gameName: "Game Name",
+        region: "Region",
+        language: "Language",
+        playStyle: "Play Style",
+        skillLevel: "Skill Level",
+      },
 
       dialog: false,
     };
