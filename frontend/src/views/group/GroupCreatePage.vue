@@ -50,32 +50,39 @@
           <v-text-field
             v-model="tagInfo.gameName"
             label="Game Name"
-            :rules="gameNameRules"
             counter
             :maxlength="64"
-            required
           ></v-text-field>
-          <v-select
-            v-model="tagInfo.region"
-            :items="regions"
-            label="Region"
-          ></v-select>
-          <v-select
-            v-model="tagInfo.language"
-            :items="languages"
-            label="Language"
-          ></v-select>
-          <v-select
-            v-model="tagInfo.playStyle"
-            :items="playStyles"
-            label="Play Style"
-            required
-          ></v-select>
-          <v-select
-            v-model="tagInfo.skillLevel"
-            :items="skillLevels"
-            label="Skill Level"
-          ></v-select>
+          <v-row>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.region"
+                :items="regions"
+                label="Region"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.language"
+                :items="languages"
+                label="Language"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.playStyle"
+                :items="playStyles"
+                label="Play Style"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.skillLevel"
+                :items="skillLevels"
+                label="Skill Level"
+              ></v-select>
+            </v-col>
+          </v-row>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
               Create Group
@@ -101,7 +108,6 @@ export default defineComponent({
     return {
       valid: true,
       groupName: "",
-      groupNameRules: [(v) => !!v || "Group name is required!"],
       maxMember: "",
       maxMemberRules: [
         (v) =>
