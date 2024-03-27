@@ -138,7 +138,6 @@ export default defineComponent({
         "Japanese",
         "Thai",
         "Hindi",
-        "etc.",
       ],
       playStyles: ["Casual", "Competitive"],
       skillLevels: ["Beginner", "Intermediate", "Advanced", "Expert", "Pro"],

@@ -18,15 +18,53 @@
       </template>
       <template v-slot:top>
         <v-divider :thickness="10" class="border-opacity-0"></v-divider>
-        <v-text-field
-          class="mx-auto w-75"
-          v-model="search"
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-          variant="outlined"
-          hide-details
-          single-line
-        ></v-text-field>
+        <v-row no-gutters align="center">
+          <v-col cols="11" class="align-center">
+            <v-text-field
+              class="mx-auto w-75 mr-4"
+              v-model="search"
+              label="Search"
+              prepend-inner-icon="mdi-magnify"
+              variant="outlined"
+              hide-details
+              single-line
+            ></v-text-field>
+          </v-col>
+          <v-col cols="1">
+            <v-btn color="#b01c24" small @click="dialog = true">
+              <v-icon left>mdi-filter</v-icon>
+              Filter
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-dialog v-model="dialog" max-width="600px">
+          <v-card>
+            <v-card-title class="headline">Filter by Tags</v-card-title>
+            <v-card-text>
+              <v-chip-group v-model="selectedTags" column multiple>
+                <v-chip
+                  v-for="(tag, i) in tags"
+                  :key="i"
+                  color="red"
+                  class="ma-1"
+                  small
+                  :value="tag"
+                  filter
+                >
+                  <v-icon left>mdi-label</v-icon>
+                  {{ tag }}
+                </v-chip>
+              </v-chip-group>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="filterByTags"
+                >Filter</v-btn
+              >
+              <v-btn color="#b01c24" text @click="dialog = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-divider :thickness="10" class="border-opacity-0"></v-divider>
       </template>
       <template v-slot:[`item.memberCount`]="{ item }"
@@ -78,6 +116,14 @@ export default defineComponent({
           this.message = this.data.message;
           this.success = this.data.success;
           console.log(response.data);
+
+          this.tags = [
+            ...new Set(
+              this.groupList
+                .flatMap((group) => Object.values(group.tagInfo))
+                .filter((tag) => tag.trim() !== "")
+            ),
+          ];
         })
         .catch((err) => alert(err));
     },
@@ -90,6 +136,27 @@ export default defineComponent({
     idNameFilter(items, search, filter) {
       search = search.toString().toLowerCase();
       return items.filter((row) => filter(row["groupName,id"], search));
+    },
+
+    async filterByTags() {
+      await this.getAllSearch();
+      const selectedTagsArray = JSON.parse(JSON.stringify(this.selectedTags));
+
+      this.groupList = this.groupList.filter((group) => {
+        const groupTags = this.filteredTags(group);
+        console.log("selectedTags:", selectedTagsArray);
+        console.log("groupTags:", groupTags);
+
+        const condition = selectedTagsArray.every((tag) =>
+          Object.values(groupTags).includes(tag)
+        );
+        console.log("Condition:", condition);
+
+        return condition;
+      });
+      console.log("Filtered groups:", this.groupList);
+
+      this.dialog = false;
     },
   },
 
@@ -122,6 +189,9 @@ export default defineComponent({
       message: "",
       success: "",
       data: "",
+      selectedTags: [],
+
+      dialog: false,
     };
   },
 
