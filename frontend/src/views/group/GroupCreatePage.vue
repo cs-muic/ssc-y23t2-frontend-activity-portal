@@ -108,6 +108,7 @@ export default defineComponent({
     return {
       valid: true,
       groupName: "",
+      groupNameRules: [(v) => !!v || "Group name is required!"],
       maxMember: "",
       maxMemberRules: [
         (v) =>
@@ -125,7 +126,6 @@ export default defineComponent({
         playStyle: "",
         skillLevel: "",
       },
-      gameNameRules: [(v) => !!v || "Game name is required!"],
       regions: [
         "North America",
         "Europe",
