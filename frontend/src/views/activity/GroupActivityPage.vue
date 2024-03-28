@@ -7,6 +7,7 @@
     <v-data-table :headers="headers" :items="activities">
       <template v-slot:[`item.action`]="{ item }">
         <v-btn @click="editActivity(item.id)" color="error">Edit</v-btn>
+        <v-btn @click="deleteActivity(item.id)" color="error">Delete</v-btn>
       </template>
       <template v-slot:[`item.start_time`]="{ item }">
         {{ formatDate(item.start_time) }}
@@ -54,6 +55,17 @@ export default {
       router.push(
         `/group/${this.$route.params.groupID}/edit-activity/${activityId}`
       );
+    },
+    deleteActivity(activityId) {
+      axios
+        .delete(`api/${activityId}/activity-delete`)
+        .then((response) => {
+          console.log(response);
+          this.getActivities();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getGroupInfo() {
       axios
