@@ -1,4 +1,5 @@
 <template>
+  <v-btn @click="goToGroup()" color="#4f1811">Back To Group Page</v-btn>
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
@@ -96,6 +97,9 @@ export default {
     },
   },
   methods: {
+    goToGroup() {
+      router.push(`/group/${this.$route.params.groupID}`);
+    },
     async submit() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
