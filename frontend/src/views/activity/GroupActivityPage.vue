@@ -4,9 +4,15 @@
       <h1>Activity List for Group: {{ groupName }}</h1>
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="activities">
+    <div v-if="activities.length === 0">No activities found</div>
+    <v-data-table v-else :headers="headers" :items="activities">
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="editActivity(item.id)" color="error">Edit</v-btn>
+        <v-btn v-if="isOwner" @click="editActivity(item.id)" color="error"
+          >Edit</v-btn
+        >
+        <v-btn v-if="isOwner" @click="deleteActivity(item.id)" color="error"
+          >Delete
+        </v-btn>
       </template>
       <template v-slot:[`item.start_time`]="{ item }">
         {{ formatDate(item.start_time) }}
@@ -28,12 +34,6 @@ export default {
       valid: true,
       groupName: this.groupName,
       groupNameRules: [(v) => !!v || "Group name is required!"],
-      //   maxMember: "",
-      //   maxMemberRules: [
-      //     (v) =>
-      //       (!!v && parseInt(v) == v && v >= 2 && v <= 255) ||
-      //       "The group size must be an integer between 2-255!",
-      //   ],
       publicDescription: this.publicDescription,
       isPrivate: this.isPrivate,
       publicDescriptionRules: [],
@@ -54,6 +54,17 @@ export default {
       router.push(
         `/group/${this.$route.params.groupID}/edit-activity/${activityId}`
       );
+    },
+    deleteActivity(activityId) {
+      axios
+        .delete(`api/${activityId}/activity-delete`)
+        .then((response) => {
+          console.log(response);
+          this.getActivities();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getGroupInfo() {
       axios
@@ -85,7 +96,7 @@ export default {
         fetch(`/api/group-activity/${groupID}`)
           .then((response) => response.json())
           .then((data) => {
-            this.activities = data.activities;
+            this.activities = data.activities || [];
           })
           .catch((err) => {
             console.log(err);
@@ -93,6 +104,26 @@ export default {
       } else {
         console.error("groupID is not defined");
       }
+    },
+    getGroupRole() {
+      axios
+        .get(`/api/get-group-role/${this.$route.params.groupID}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            this.data = response.data;
+            this.isOwner = this.data.owner;
+            this.isMember = this.data.member;
+            this.success = this.data.success;
+          } else {
+            console.log("Cannot fetch your role in this group!");
+            router.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          router.push("/");
+        });
     },
 
     formatDate(dateString) {
@@ -109,6 +140,7 @@ export default {
   mounted() {
     this.getGroupInfo();
     this.getActivities();
+    this.getGroupRole();
   },
 };
 </script>
