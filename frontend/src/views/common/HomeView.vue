@@ -98,6 +98,11 @@ export default defineComponent({
         .get("api/user-activities")
         .then((response) => {
           this.activities = response.data.slice(0, 5);
+          this.activities.sort(function (a, b) {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.date) - new Date(a.date);
+          });
         })
         .catch((err) => {
           console.log(err);

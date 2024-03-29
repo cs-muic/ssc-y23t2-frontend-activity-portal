@@ -25,12 +25,30 @@
         </v-btn>
         <v-btn
           block
+          v-if="this.isOwner"
+          class="mt-1"
+          color="#ad1d25"
+          @click="routeCreateActivity()"
+        >
+          Create Activity
+        </v-btn>
+        <v-btn
+          block
           v-if="!this.isMember && !this.isOwner"
           class="mt-1"
           color="#ad1d25"
           @click="joinGroup()"
         >
           Join Group
+        </v-btn>
+        <v-btn
+          block
+          v-if="this.isMember"
+          class="mt-1"
+          color="#ad1d25"
+          @click="checkActivity()"
+        >
+          Check Activity
         </v-btn>
         <v-btn
           block
@@ -108,6 +126,14 @@ export default defineComponent({
     routeEditGroup() {
       console.log(`/group/${this.group.id}/group-edit`);
       router.push(`/group/${this.group.id}/group-edit`);
+    },
+    routeCreateActivity() {
+      console.log(`/group/${this.group.id}/activity-create`);
+      router.push(`/group/${this.group.id}/activity-create`);
+    },
+    checkActivity() {
+      console.log(`/group/${this.group.id}/group-activities`);
+      router.push(`/group/${this.group.id}/group-activities`);
     },
     joinGroup() {
       console.log(`/api/group-join/${this.group.id}`);
