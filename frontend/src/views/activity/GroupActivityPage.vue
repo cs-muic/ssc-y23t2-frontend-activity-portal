@@ -4,7 +4,8 @@
       <h1>Activity List for Group: {{ groupName }}</h1>
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="activities">
+    <div v-if="activities.length === 0">No activities found</div>
+    <v-data-table v-else :headers="headers" :items="activities">
       <template v-slot:[`item.action`]="{ item }">
         <v-btn @click="editActivity(item.id)" color="error">Edit</v-btn>
         <v-btn @click="deleteActivity(item.id)" color="error">Delete</v-btn>
@@ -97,7 +98,7 @@ export default {
         fetch(`/api/group-activity/${groupID}`)
           .then((response) => response.json())
           .then((data) => {
-            this.activities = data.activities;
+            this.activities = data.activities || [];
           })
           .catch((err) => {
             console.log(err);
