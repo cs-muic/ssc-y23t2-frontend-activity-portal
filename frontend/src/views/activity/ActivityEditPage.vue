@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <v-btn @click="goToActivity()" color="error">Back to Activity Page</v-btn>
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
         <v-sheet class="mx-auto" width="1000">
@@ -96,6 +97,9 @@ export default {
     },
   },
   methods: {
+    goToGroup() {
+      router.push(`/group/${this.$route.params.groupID}/group-activities`);
+    },
     async submit() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
