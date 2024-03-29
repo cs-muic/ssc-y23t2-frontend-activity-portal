@@ -42,7 +42,7 @@
               ></v-textarea>
 
               <v-btn block class="mt-4" color="#ad1d25" @click="submit"
-                >Create Activity
+                >Edit Activity
               </v-btn>
               <v-btn block class="mt-4" color="#636161" @click="reset"
                 >Reset
@@ -109,7 +109,7 @@ export default {
         };
         axios
           .put(
-            `api/${this.$route.params.groupID}/activity-edit/${this.route.params.activityID}`,
+            `api/${this.$route.params.groupID}/activity-edit/${this.$route.params.activityID}`,
             activity
           )
           .then(function (response) {
