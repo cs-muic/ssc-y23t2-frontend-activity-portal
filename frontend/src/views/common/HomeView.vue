@@ -111,7 +111,7 @@ export default defineComponent({
     unjoinActivity(activityId) {
       axios.post(`/api/unjoin-activity/${activityId}`).then(() => {
         axios.get("api/user-activities").then((response) => {
-          this.activities = response.data;
+          this.activities = response.data.slice(0, 5);
         });
       });
     },
@@ -125,6 +125,10 @@ export default defineComponent({
       };
       return new Date(dateString).toLocaleString(undefined, options);
     },
+  },
+  mounted() {
+    console.log(this.getActivities());
+    this.getActivities();
   },
 });
 </script>
