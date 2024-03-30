@@ -44,9 +44,6 @@
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     <v-data-table-virtual :headers="headers" :items="activities">
-      <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="unjoinActivity(item.id)" color="error"> Unjoin</v-btn>
-      </template>
       <template v-slot:[`item.start_time`]="{ item }">
         {{ formatDate(item.start_time) }}
       </template>
@@ -75,7 +72,7 @@ export default defineComponent({
         { title: "Description", value: "description" },
         { title: "Start Time", value: "start_time" },
         { title: "End Time", value: "end_time" },
-        { title: "Action", value: "action" },
+        { title: "Status", value: "status" },
       ],
       activities: [],
     };
