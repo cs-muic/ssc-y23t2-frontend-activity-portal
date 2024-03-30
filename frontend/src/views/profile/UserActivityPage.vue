@@ -29,6 +29,7 @@ export default {
         { title: "Description", value: "description" },
         { title: "Start Time", value: "start_time" },
         { title: "End Time", value: "end_time" },
+        { title: "Status", value: "status" },
         { title: "Action", value: "action" },
       ],
       activities: [],

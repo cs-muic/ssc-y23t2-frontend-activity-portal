@@ -73,6 +73,7 @@ export default {
         start_time: null,
         end_time: null,
         cleanup_date: null,
+        status: null,
         auto_delete_overtime: false,
         description: "",
       },
@@ -110,6 +111,7 @@ export default {
           cleanup_date: this.activity.cleanup_date,
           auto_delete_overtime: this.activity.auto_delete_overtime,
           description: this.activity.description,
+          status: this.activity.status,
         };
         axios
           .post(`/api/${this.$route.params.groupID}/activity-create`, activity)
