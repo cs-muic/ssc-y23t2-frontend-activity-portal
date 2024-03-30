@@ -5,14 +5,11 @@
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     <v-data-table :headers="headers" :items="activities">
-      <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="unjoinActivity(item.id)" color="error"> Unjoin</v-btn>
-      </template>
       <template v-slot:[`item.start_time`]="{ item }">
-        {{ formatDate(item.start_time) }}
+        {{ item && item.start_time ? formatDate(item.start_time) : "" }}
       </template>
       <template v-slot:[`item.end_time`]="{ item }">
-        {{ formatDate(item.end_time) }}
+        {{ item && item.end_time ? formatDate(item.end_time) : "" }}
       </template>
     </v-data-table>
   </v-container>
@@ -30,7 +27,6 @@ export default {
         { title: "Start Time", value: "start_time" },
         { title: "End Time", value: "end_time" },
         { title: "Status", value: "status" },
-        { title: "Action", value: "action" },
       ],
       activities: [],
     };
@@ -50,14 +46,11 @@ export default {
         });
     },
     formatDate(dateString) {
-      const options = {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      };
-      return new Date(dateString).toLocaleString(undefined, options);
+      // Convert the date string to a Date object
+      let date = new Date(dateString);
+
+      // Return the local string
+      return date.toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
     },
   },
 
