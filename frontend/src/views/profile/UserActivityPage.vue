@@ -48,13 +48,6 @@ export default {
           console.log(err);
         });
     },
-    unjoinActivity(activityId) {
-      axios.post(`/api/unjoin-activity/${activityId}`).then(() => {
-        axios.get("api/user-activities").then((response) => {
-          this.activities = response.data;
-        });
-      });
-    },
     formatDate(dateString) {
       const options = {
         year: "numeric",
