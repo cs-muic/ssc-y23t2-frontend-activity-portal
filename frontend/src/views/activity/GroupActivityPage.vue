@@ -2,6 +2,7 @@
   <v-container>
     <div style="text-align: center">
       <h1>Activity List for Group: {{ groupName }}</h1>
+      <v-btn @click="goToGroup()" color="#4f1811">Group Page</v-btn>
     </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     <div v-if="activities.length === 0">No activities found</div>
@@ -54,6 +55,9 @@ export default {
       router.push(
         `/group/${this.$route.params.groupID}/edit-activity/${activityId}`
       );
+    },
+    goToGroup() {
+      router.push(`/group/${this.$route.params.groupID}`);
     },
     deleteActivity(activityId) {
       axios

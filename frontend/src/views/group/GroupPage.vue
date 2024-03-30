@@ -25,12 +25,30 @@
         </v-btn>
         <v-btn
           block
+          v-if="this.isOwner"
+          class="mt-1"
+          color="#ad1d25"
+          @click="routeCreateActivity()"
+        >
+          Create Activity
+        </v-btn>
+        <v-btn
+          block
           v-if="!this.isMember && !this.isOwner"
           class="mt-1"
           color="#ad1d25"
           @click="joinGroup()"
         >
           Join Group
+        </v-btn>
+        <v-btn
+          block
+          v-if="this.isMember"
+          class="mt-1"
+          color="#ad1d25"
+          @click="checkActivity()"
+        >
+          Check Activity
         </v-btn>
         <v-btn
           block
@@ -44,6 +62,18 @@
       </v-container>
     </v-sheet>
   </v-col>
+  <v-container>
+    <h1 class="text-center">Member List</h1>
+    <v-divider :thickness="20" class="border-opacity-0"></v-divider>
+    <v-data-table :headers="headers" :items="memberList">
+      <template v-slot:[`item.displayName`]="{ item }">{{
+        item.displayName
+      }}</template>
+      <template v-slot:[`item.username`]="{ item }">{{
+        item.username
+      }}</template>
+    </v-data-table>
+  </v-container>
 </template>
 <script>
 import { defineComponent } from "vue";
@@ -105,9 +135,38 @@ export default defineComponent({
           router.push("/");
         });
     },
+    getMembers() {
+      axios
+        .get(`/api/get-group-members/${this.$route.params.groupID}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            this.data = response.data;
+            this.memberList = this.data.members;
+            this.message = this.data.message;
+            this.success = this.data.success;
+          } else {
+            console.log("This group does not exist!");
+            router.push("/");
+          }
+        })
+        .catch((err) => {
+          // alert(err);
+          console.log(err);
+          router.push("/");
+        });
+    },
     routeEditGroup() {
       console.log(`/group/${this.group.id}/group-edit`);
       router.push(`/group/${this.group.id}/group-edit`);
+    },
+    routeCreateActivity() {
+      console.log(`/group/${this.group.id}/activity-create`);
+      router.push(`/group/${this.group.id}/activity-create`);
+    },
+    checkActivity() {
+      console.log(`/group/${this.group.id}/group-activities`);
+      router.push(`/group/${this.group.id}/group-activities`);
     },
     joinGroup() {
       console.log(`/api/group-join/${this.group.id}`);
@@ -149,6 +208,11 @@ export default defineComponent({
 
   data() {
     return {
+      headers: [
+        { title: "displayName", key: "displayName" },
+        { title: "username", key: "username" },
+      ],
+      memberList: [],
       group: "",
       message: "",
       success: "",
@@ -160,6 +224,7 @@ export default defineComponent({
   mounted() {
     this.getGroupInfo();
     this.getGroupRole();
+    this.getMembers();
   },
 });
 </script>
