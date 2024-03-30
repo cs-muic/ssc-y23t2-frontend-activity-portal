@@ -1,10 +1,8 @@
 <template>
   <v-col align-self="center">
     <v-container>
-      <center>
-        <h1>{{ group.groupName }}</h1>
-        {{ group.id }}
-      </center>
+      <h1 class="text-center">{{ group.groupName }}</h1>
+      <div class="text-center">{{ group.id }}</div>
       <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     </v-container>
     <v-sheet class="mx-auto w-75 h-50">
@@ -172,12 +170,12 @@ export default defineComponent({
       console.log(`/api/group-join/${this.group.id}`);
       axios
         .post(`/api/group-join/${this.group.id}`)
-        .then(function (response) {
+        .then((response) => {
           if (response.data.success) {
             console.log(response);
-            // TODO: route this to force refresh page
-            //   const routeId = this.$route.params.groupID;
-            //   this.$router.push(`/group/${routeId}`);
+            this.getMembers();
+            this.getGroupInfo();
+            this.getGroupRole();
           } else {
             console.log(response);
           }
@@ -190,12 +188,12 @@ export default defineComponent({
       console.log(`/api/group-leave/${this.group.id}`);
       axios
         .post(`/api/group-leave/${this.group.id}`)
-        .then(function (response) {
+        .then((response) => {
           if (response.data.success) {
             console.log(response);
-            // TODO: route this to force refresh page
-            //   const routeId = this.$route.params.groupID;
-            //   this.$router.push(`/group/${routeId}`);
+            this.getMembers();
+            this.getGroupInfo();
+            this.getGroupRole();
           } else {
             console.log(response);
           }
