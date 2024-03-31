@@ -33,47 +33,61 @@
     <v-main>
       <router-view />
     </v-main>
-    <div class="text_box">
-      <div class="header">
+    <v-container v-if="status()">
+      <div class="text_box">
+        <div class="header">
+          <v-btn
+            @click="chatWindow"
+            target="_blank text"
+            position="relative"
+            v-if="loggedIn()"
+          >
+            <v-icon v-if="status()">mdi-window-minimize</v-icon>
+            <v-icon v-else>mdi-menu-down</v-icon>
+          </v-btn>
+        </div>
+        <v-container v-if="status()" class="w-100">
+          <v-table theme="dark">
+            <thead>
+              <tr>
+                <th>Messages</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in received_messages" :key="item">
+                <td>
+                  <h4>{{ item.username }}</h4>
+                  {{ item.message }}
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+          <div class="bottom">
+            <v-card>
+              <v-text-field
+                v-model="send_message"
+                :rules="messageRules"
+                label="Send your message"
+                base-color="gray"
+              ></v-text-field>
+              <v-btn type="submit" block @click="send">send</v-btn>
+            </v-card>
+          </div>
+        </v-container>
+      </div>
+    </v-container>
+    <v-container v-else>
+      <div class="collapsed">
         <v-btn
           @click="chatWindow"
           target="_blank text"
           position="relative"
           v-if="loggedIn()"
         >
-          <v-icon v-if="status()">mdi-window-minimize</v-icon>
-          <v-icon v-else>mdi-menu-down</v-icon>
+          <v-icon>mdi-menu-up</v-icon>
         </v-btn>
       </div>
-      <v-container v-if="status()" class="w-100">
-        <v-table theme="dark">
-          <thead>
-            <tr>
-              <th>Messages</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in received_messages" :key="item">
-              <td>
-                <h4>{{ item.username }}</h4>
-                {{ item.message }}
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-        <div class="bottom">
-          <v-card>
-            <v-text-field
-              v-model="send_message"
-              :rules="messageRules"
-              label="Send your message"
-              base-color="gray"
-            ></v-text-field>
-            <v-btn type="submit" block @click="send">send</v-btn>
-          </v-card>
-        </div>
-      </v-container>
-    </div>
+    </v-container>
   </v-app>
 </template>
 
@@ -89,6 +103,13 @@
 .bottom {
   position: sticky;
   width: 100%;
+  height: 10%;
+  bottom: 0;
+  left: 0;
+}
+.collapsed {
+  position: fixed;
+  width: 10%;
   height: 10%;
   bottom: 0;
   left: 0;
