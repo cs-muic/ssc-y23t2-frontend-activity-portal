@@ -35,108 +35,42 @@
     </v-main>
     <div class="text_box">
       <div class="header">
-        <v-btn @click="chatWindow" target="_blank text" position="relative">
-          <v-icon>mdi-open-in-new</v-icon>
+        <v-btn
+          @click="chatWindow"
+          target="_blank text"
+          position="relative"
+          v-if="loggedIn()"
+        >
+          <v-icon v-if="status()">mdi-window-minimize</v-icon>
+          <v-icon v-else>mdi-menu-down</v-icon>
         </v-btn>
       </div>
       <v-container v-if="status()" class="w-100">
         <v-table theme="dark">
           <thead>
             <tr>
-              <th>Greetings</th>
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
-            </tr>
-            <tr>
-              x
+              <th>Messages</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in received_messages" :key="item">
-              <td>{{ item }}</td>
+              <td>
+                <h4>{{ item.username }}</h4>
+                {{ item.message }}
+              </td>
             </tr>
           </tbody>
         </v-table>
         <div class="bottom">
-          <v-sheet class="mx-auto" width="300">
-            <v-form @submit.prevent>
-              <v-text-field
-                v-model="send_message"
-                :rules="messageRules"
-                label="Your Name Here"
-                position="sticky"
-              ></v-text-field>
-              <v-btn class="mt-2" type="submit" block @click="send">send</v-btn>
-            </v-form>
-          </v-sheet>
+          <v-card>
+            <v-text-field
+              v-model="send_message"
+              :rules="messageRules"
+              label="Send your message"
+              base-color="gray"
+            ></v-text-field>
+            <v-btn type="submit" block @click="send">send</v-btn>
+          </v-card>
         </div>
       </v-container>
     </div>
@@ -145,7 +79,7 @@
 
 <style>
 .text_box {
-  position: sticky;
+  position: fixed;
   width: 30%;
   height: 300px;
   bottom: 0;
@@ -170,8 +104,9 @@
 <script>
 //This will be run on every page
 import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
-let openChat = true;
 export default {
   name: "App",
 
@@ -181,7 +116,12 @@ export default {
       { title: "Create Group", link: "/group-create" },
       { title: "Your Groups", link: "/my-groups" },
     ],
-    openChat,
+    openChat: false,
+    received_messages: [],
+    send_message: null,
+    messageRules: [],
+    connected: false,
+    groupID: 8,
   }),
   methods: {
     //getting the username from the store
@@ -201,15 +141,59 @@ export default {
         return this.openChat;
       }
     },
+    loggedIn() {
+      let username = this.$store.state.username;
+      return username != null;
+    },
     //logging the user out
     logout() {
+      this.disconnect();
       this.$store.commit("clearUser");
       axios.get("/api/logout");
       this.$router.push("/login");
     },
     chatWindow() {
       this.openChat = !this.openChat;
-      console.log(this.openChat);
+      if (!this.connected) this.connect();
+    },
+    send() {
+      console.log("Send message:" + this.send_message);
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = {
+          username: this.getUsername(),
+          groupID: this.groupID,
+          content: this.send_message,
+        };
+        this.stompClient.send("/api/socket/messages", JSON.stringify(msg), {});
+      }
+    },
+    connect() {
+      this.socket = new SockJS("/api/portal-socket");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          this.connected = true;
+          console.log(frame);
+          this.stompClient.subscribe("/api/topic/messages", (tick) => {
+            console.log("GOT SMTH");
+            console.log(tick);
+            this.received_messages.push(JSON.parse(tick.body));
+          });
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        }
+      );
+    },
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
+      this.connected = false;
+      this.openChat = false;
+      this.received_messages = [];
     },
   },
 };
