@@ -104,12 +104,18 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const activity = {
-          name: this.activity.name,
-          start_time: new Date(this.activity.start_time).toISOString(),
-          end_time: new Date(this.activity.end_time).toISOString(),
+          me: this.activity.name,
+          start_time: new Date(this.activity.start_time).toLocaleString(
+            "en-US",
+            { timeZone: "Asia/Bangkok" }
+          ),
+          end_time: new Date(this.activity.end_time).toLocaleString("en-US", {
+            timeZone: "Asia/Bangkok",
+          }),
           cleanup_date: this.activity.cleanup_date,
           auto_delete_overtime: this.activity.auto_delete_overtime,
           description: this.activity.description,
+          status: this.activity.status,
         };
         axios
           .put(
