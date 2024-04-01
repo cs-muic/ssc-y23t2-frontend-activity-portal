@@ -36,6 +36,7 @@
           class="mt-1"
           color="#ad1d25"
           @click="joinGroup()"
+          :disabled="isJoining"
         >
           Join Group
         </v-btn>
@@ -57,6 +58,52 @@
         >
           Leave Group
         </v-btn>
+        <v-btn
+          block
+          v-if="isOwner"
+          class="mt-1"
+          color="#ad1d25"
+          @click="getPendingRequests()"
+        >
+          Pending Requests
+        </v-btn>
+        <v-dialog v-model="dialog" max-width="600px">
+          <v-card>
+            <v-card-title class="text-center">Pending Requests</v-card-title>
+            <v-card-text>
+              <v-data-table :headers="requestHeaders" :items="pendingRequests">
+                <template v-slot:[`item.displayName`]="{ item }">{{
+                  item.displayName
+                }}</template>
+                <template v-slot:[`item.username`]="{ item }">{{
+                  item.username
+                }}</template>
+                <template v-slot:[`item.actions`]="{ item }">
+                  <div class="d-flex justify-space-between">
+                    <v-btn
+                      flex
+                      color="green"
+                      @click="acceptRequest(item.username)"
+                    >
+                      Accept
+                    </v-btn>
+                    <v-btn
+                      flex
+                      color="#ad1d25"
+                      @click="rejectRequest(item.username)"
+                    >
+                      Reject
+                    </v-btn>
+                  </div>
+                </template>
+              </v-data-table>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="#b01c24" text @click="dialog = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-sheet>
   </v-col>
@@ -92,6 +139,26 @@ export default defineComponent({
   components: {},
 
   methods: {
+    getPendingRequests() {
+      this.dialog = true;
+      axios
+        .get(`/api/get-pending-requests/${this.$route.params.groupID}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            this.data = response.data;
+            this.pendingRequests = response.data.joinRequests;
+            this.message = this.data.message;
+            this.success = this.data.success;
+          } else {
+            console.log(response.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     getGroupInfo() {
       axios
         .get(`/api/group-search/${this.$route.params.groupID}`)
@@ -167,6 +234,7 @@ export default defineComponent({
       router.push(`/group/${this.group.id}/group-activities`);
     },
     joinGroup() {
+      this.isJoining = true;
       console.log(`/api/group-join/${this.group.id}`);
       axios
         .post(`/api/group-join/${this.group.id}`)
@@ -176,11 +244,18 @@ export default defineComponent({
             this.getMembers();
             this.getGroupInfo();
             this.getGroupRole();
+            if (this.group.isPrivate) {
+              alert("Request sent successfully! Please wait for approval.");
+            } else {
+              alert("You have joined the group!");
+            }
           } else {
+            alert("Request failed!");
             console.log(response);
           }
         })
         .catch(function (error) {
+          alert("Request failed!");
           console.log(error);
         });
     },
@@ -216,6 +291,14 @@ export default defineComponent({
       success: "",
       isOwner: this.isOwner,
       isMember: this.isMember,
+      isJoining: false,
+      pendingRequests: [],
+      dialog: false,
+      requestHeaders: [
+        { title: "Display Name", key: "displayName" },
+        { title: "Username", key: "username" },
+        { title: "Actions", key: "actions" },
+      ],
     };
   },
 
@@ -223,6 +306,9 @@ export default defineComponent({
     this.getGroupInfo();
     this.getGroupRole();
     this.getMembers();
+    if (this.isOwner) {
+      this.getPendingRequests();
+    }
   },
 });
 </script>

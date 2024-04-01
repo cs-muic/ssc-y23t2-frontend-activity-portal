@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <center>
-      <h1>Edit Group : {{ groupName }}</h1>
-    </center>
+    <h1 class="text-center">Edit Group : {{ groupName }}</h1>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
   </v-container>
   <v-col align-self="center">
