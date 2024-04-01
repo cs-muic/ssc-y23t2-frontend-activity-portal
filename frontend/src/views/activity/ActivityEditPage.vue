@@ -104,7 +104,7 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const activity = {
-          me: this.activity.name,
+          name: this.activity.name,
           start_time: new Date(this.activity.start_time).toLocaleString(
             "en-US",
             { timeZone: "Asia/Bangkok" }
