@@ -83,14 +83,14 @@
                     <v-btn
                       flex
                       color="green"
-                      @click="acceptRequest(item.username)"
+                      @click="acceptRequest(item.joinRequest.userID)"
                     >
                       Accept
                     </v-btn>
                     <v-btn
                       flex
                       color="#ad1d25"
-                      @click="rejectRequest(item.username)"
+                      @click="rejectRequest(item.joinRequest.userID)"
                     >
                       Reject
                     </v-btn>
@@ -100,7 +100,16 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="#b01c24" text @click="dialog = false">Close</v-btn>
+              <v-btn
+                color="#b01c24"
+                text
+                @click="
+                  dialog = false;
+                  getGroupInfo();
+                  getMembers();
+                "
+                >Close</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -139,6 +148,44 @@ export default defineComponent({
   components: {},
 
   methods: {
+    acceptRequest(userID) {
+      axios
+        .post(
+          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+        )
+        .then((response) => {
+          if (response.data.success) {
+            this.pendingRequests = this.pendingRequests.filter(
+              (request) => request.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+          this.getPendingRequests();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    rejectRequest(userID) {
+      axios
+        .post(
+          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+        )
+        .then((response) => {
+          if (response.data.success) {
+            this.pendingRequests = this.pendingRequests.filter(
+              (request) => request.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+          this.getPendingRequests();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getPendingRequests() {
       this.dialog = true;
       axios
@@ -148,6 +195,7 @@ export default defineComponent({
           if (response.data.success) {
             this.data = response.data;
             this.pendingRequests = response.data.joinRequests;
+            console.log("Pending Requests: ", this.pendingRequests);
             this.message = this.data.message;
             this.success = this.data.success;
           } else {
