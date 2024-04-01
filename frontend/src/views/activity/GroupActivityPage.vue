@@ -8,10 +8,16 @@
     <div v-if="activities.length === 0">No activities found</div>
     <v-data-table v-else :headers="headers" :items="activities">
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn v-if="isOwner" @click="editActivity(item.id)" color="error"
-          >Edit</v-btn
-        >
-        <v-btn v-if="isOwner" @click="deleteActivity(item.id)" color="error"
+        <v-btn
+          v-if="isOwner && item.status === 'PENDING'"
+          @click="editActivity(item.id)"
+          color="blue"
+          >Edit
+        </v-btn>
+        <v-btn
+          v-if="isOwner && item.status === 'PENDING'"
+          @click="deleteActivity(item.id)"
+          color="error"
           >Delete
         </v-btn>
       </template>
@@ -45,6 +51,7 @@ export default {
         { title: "Description", value: "description" },
         { title: "Start Time", value: "start_time" },
         { title: "End Time", value: "end_time" },
+        { title: "Status", value: "status" },
         { title: "Action", value: "action" },
       ],
       activities: [],
