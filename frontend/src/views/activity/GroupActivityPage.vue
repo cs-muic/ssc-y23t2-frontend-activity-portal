@@ -15,7 +15,10 @@
           >Edit
         </v-btn>
         <v-btn
-          v-if="isOwner && item.status === 'PENDING'"
+          v-if="
+            isOwner &&
+            (item.status === 'PENDING' || item.status === 'COMPLETED')
+          "
           @click="deleteActivity(item.id)"
           color="error"
           >Delete
