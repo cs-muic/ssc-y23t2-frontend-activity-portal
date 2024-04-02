@@ -82,6 +82,15 @@
                   <div class="d-flex justify-space-between">
                     <v-btn
                       flex
+                      class="small-button"
+                      color="blue"
+                      @click="viewProfile(item.username)"
+                    >
+                      View Profile
+                    </v-btn>
+                    <v-btn
+                      flex
+                      class="small-button"
                       color="green"
                       @click="acceptRequest(item.joinRequest.userID)"
                     >
@@ -89,6 +98,7 @@
                     </v-btn>
                     <v-btn
                       flex
+                      class="small-button"
                       color="#ad1d25"
                       @click="rejectRequest(item.joinRequest.userID)"
                     >
@@ -127,6 +137,9 @@
         item.username
       }}</template>
       <template v-slot:[`item.actions`]="{ item }">
+        <v-btn class="mr-4" color="blue" @click="viewProfile(item.username)">
+          View Profile
+        </v-btn>
         <v-btn
           v-if="isOwner && item.id !== ownerID"
           color="#ad1d25"
@@ -157,6 +170,10 @@ export default defineComponent({
   components: {},
 
   methods: {
+    viewProfile(username) {
+      router.push(`/user/${username}`);
+    },
+
     acceptRequest(userID) {
       axios
         .post(
@@ -389,3 +406,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.small-button {
+  padding: 4px 8px;
+  font-size: 0.7rem;
+}
+</style>
