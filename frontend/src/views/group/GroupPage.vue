@@ -126,6 +126,15 @@
       <template v-slot:[`item.username`]="{ item }">{{
         item.username
       }}</template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn
+          v-if="isOwner && item.id !== ownerID"
+          color="#ad1d25"
+          @click="kickMember(item.id)"
+        >
+          Kick
+        </v-btn>
+      </template>
     </v-data-table>
   </v-container>
 </template>
@@ -186,6 +195,22 @@ export default defineComponent({
           console.log(err);
         });
     },
+    kickMember(userID) {
+      axios
+        .post(`/api/kick-member/${this.$route.params.groupID}/${userID}`)
+        .then((response) => {
+          if (response.data.success) {
+            this.memberList = this.memberList.filter(
+              (member) => member.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getPendingRequests() {
       this.dialog = true;
       axios
@@ -217,6 +242,7 @@ export default defineComponent({
             this.group = this.data.group;
             this.message = this.data.message;
             this.success = this.data.success;
+            this.ownerID = this.data.group.ownerID;
           } else {
             console.log("This group does not exist!");
             router.push("/");
@@ -256,6 +282,7 @@ export default defineComponent({
           if (response.data.success) {
             this.data = response.data;
             this.memberList = this.data.members;
+            console.log("Members: ", this.memberList);
             this.message = this.data.message;
             this.success = this.data.success;
           } else {
@@ -330,13 +357,15 @@ export default defineComponent({
   data() {
     return {
       headers: [
-        { title: "displayName", key: "displayName" },
-        { title: "username", key: "username" },
+        { title: "Display Name", key: "displayName" },
+        { title: "Username", key: "username" },
+        { title: "Actions", key: "actions" },
       ],
       memberList: [],
       group: "",
       message: "",
       success: "",
+      ownerID: null,
       isOwner: this.isOwner,
       isMember: this.isMember,
       isJoining: false,
