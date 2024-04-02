@@ -136,6 +136,8 @@ export default {
       { title: "Join Group", link: "/group-search" },
       { title: "Create Group", link: "/group-create" },
       { title: "Your Groups", link: "/my-groups" },
+      { title: "Edit Profile", link: "/edit-profile" },
+      { title: "Change Password", link: "/change-password" },
     ],
     openChat: false,
     received_messages: [],
