@@ -60,7 +60,7 @@
         </v-btn>
         <v-btn
           block
-          v-if="isOwner"
+          v-if="isOwner && group.isPrivate"
           class="mt-1"
           color="#ad1d25"
           @click="getPendingRequests()"
