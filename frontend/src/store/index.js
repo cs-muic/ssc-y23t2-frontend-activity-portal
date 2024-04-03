@@ -31,8 +31,6 @@ export default createStore({
       state.userID = null;
     },
     setGroup: function (state, group) {
-      console.log(group.id);
-      console.log(group.groupName);
       state.myGroups[group.id] = group.groupName;
     },
   },

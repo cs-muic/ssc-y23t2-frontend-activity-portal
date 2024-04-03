@@ -191,7 +191,6 @@ export default {
       }
     },
     connect() {
-      this.getMyGroups();
       this.socket = new SockJS("/api/portal-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
@@ -223,20 +222,6 @@ export default {
       this.connected = false;
       this.openChat = false;
       this.received_messages = [];
-    },
-    getMyGroups() {
-      return axios
-        .get("/api/fetch-my-groups")
-        .then((response) => {
-          console.log(response);
-          for (let i = 0; i < response.data.group.length; i++) {
-            let group = response.data.group[i];
-            console.log(group);
-            this.$store.commit("setGroup", group);
-          }
-          console.log(this.$store.state.myGroups);
-        })
-        .catch((err) => alert(err));
     },
   },
 };
