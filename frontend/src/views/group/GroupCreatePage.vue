@@ -164,7 +164,7 @@ export default defineComponent({
           isPrivate: this.isPrivate,
           maxMember: parseInt(this.maxMember),
           publicDescription: this.publicDescription,
-          privateDescription: this.privateDescription,
+          privateDescription: this.isprivate ? this.privateDescription : "",
           ownerID: this.$store.state.userID,
           tagInfo: JSON.stringify(this.tagInfo),
         };
@@ -174,7 +174,7 @@ export default defineComponent({
           .then(function (response) {
             if (response.data.success) {
               console.log(response);
-              router.push("/");
+              router.push("/my-groups");
             } else {
               console.log(response);
             }
