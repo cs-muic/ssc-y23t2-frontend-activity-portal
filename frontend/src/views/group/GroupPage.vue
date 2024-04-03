@@ -1,10 +1,8 @@
 <template>
   <v-col align-self="center">
     <v-container>
-      <center>
-        <h1>{{ group.groupName }}</h1>
-        {{ group.id }}
-      </center>
+      <h1 class="text-center">{{ group.groupName }}</h1>
+      <div class="text-center">{{ group.id }}</div>
       <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     </v-container>
     <v-sheet class="mx-auto w-75 h-50">
@@ -38,6 +36,7 @@
           class="mt-1"
           color="#ad1d25"
           @click="joinGroup()"
+          :disabled="isJoining"
         >
           Join Group
         </v-btn>
@@ -59,6 +58,71 @@
         >
           Leave Group
         </v-btn>
+        <v-btn
+          block
+          v-if="isOwner && group.isPrivate"
+          class="mt-1"
+          color="#ad1d25"
+          @click="getPendingRequests()"
+        >
+          Pending Requests
+        </v-btn>
+        <v-dialog v-model="dialog" max-width="600px">
+          <v-card>
+            <v-card-title class="text-center">Pending Requests</v-card-title>
+            <v-card-text>
+              <v-data-table :headers="requestHeaders" :items="pendingRequests">
+                <template v-slot:[`item.displayName`]="{ item }">{{
+                  item.displayName
+                }}</template>
+                <template v-slot:[`item.username`]="{ item }">{{
+                  item.username
+                }}</template>
+                <template v-slot:[`item.actions`]="{ item }">
+                  <div class="d-flex justify-space-between">
+                    <v-btn
+                      flex
+                      class="small-button"
+                      color="blue"
+                      @click="viewProfile(item.username)"
+                    >
+                      View Profile
+                    </v-btn>
+                    <v-btn
+                      flex
+                      class="small-button"
+                      color="green"
+                      @click="acceptRequest(item.joinRequest.userID)"
+                    >
+                      Accept
+                    </v-btn>
+                    <v-btn
+                      flex
+                      class="small-button"
+                      color="#ad1d25"
+                      @click="rejectRequest(item.joinRequest.userID)"
+                    >
+                      Reject
+                    </v-btn>
+                  </div>
+                </template>
+              </v-data-table>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="#b01c24"
+                text
+                @click="
+                  dialog = false;
+                  getGroupInfo();
+                  getMembers();
+                "
+                >Close</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-sheet>
   </v-col>
@@ -72,6 +136,18 @@
       <template v-slot:[`item.username`]="{ item }">{{
         item.username
       }}</template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn class="mr-4" color="blue" @click="viewProfile(item.username)">
+          View Profile
+        </v-btn>
+        <v-btn
+          v-if="isOwner && item.id !== ownerID"
+          color="#ad1d25"
+          @click="kickMember(item.id)"
+        >
+          Kick
+        </v-btn>
+      </template>
     </v-data-table>
   </v-container>
 </template>
@@ -94,6 +170,85 @@ export default defineComponent({
   components: {},
 
   methods: {
+    viewProfile(username) {
+      router.push(`/user/${username}`);
+    },
+
+    acceptRequest(userID) {
+      axios
+        .post(
+          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+        )
+        .then((response) => {
+          if (response.data.success) {
+            this.pendingRequests = this.pendingRequests.filter(
+              (request) => request.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+          this.getPendingRequests();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    rejectRequest(userID) {
+      axios
+        .post(
+          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+        )
+        .then((response) => {
+          if (response.data.success) {
+            this.pendingRequests = this.pendingRequests.filter(
+              (request) => request.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+          this.getPendingRequests();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    kickMember(userID) {
+      axios
+        .post(`/api/kick-member/${this.$route.params.groupID}/${userID}`)
+        .then((response) => {
+          if (response.data.success) {
+            this.memberList = this.memberList.filter(
+              (member) => member.id !== userID
+            );
+          } else {
+            console.log(response.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getPendingRequests() {
+      this.dialog = true;
+      axios
+        .get(`/api/get-pending-requests/${this.$route.params.groupID}`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            this.data = response.data;
+            this.pendingRequests = response.data.joinRequests;
+            console.log("Pending Requests: ", this.pendingRequests);
+            this.message = this.data.message;
+            this.success = this.data.success;
+          } else {
+            console.log(response.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     getGroupInfo() {
       axios
         .get(`/api/group-search/${this.$route.params.groupID}`)
@@ -104,6 +259,7 @@ export default defineComponent({
             this.group = this.data.group;
             this.message = this.data.message;
             this.success = this.data.success;
+            this.ownerID = this.data.group.ownerID;
           } else {
             console.log("This group does not exist!");
             router.push("/");
@@ -143,6 +299,7 @@ export default defineComponent({
           if (response.data.success) {
             this.data = response.data;
             this.memberList = this.data.members;
+            console.log("Members: ", this.memberList);
             this.message = this.data.message;
             this.success = this.data.success;
           } else {
@@ -169,20 +326,28 @@ export default defineComponent({
       router.push(`/group/${this.group.id}/group-activities`);
     },
     joinGroup() {
+      this.isJoining = true;
       console.log(`/api/group-join/${this.group.id}`);
       axios
         .post(`/api/group-join/${this.group.id}`)
-        .then(function (response) {
+        .then((response) => {
           if (response.data.success) {
             console.log(response);
-            // TODO: route this to force refresh page
-            //   const routeId = this.$route.params.groupID;
-            //   this.$router.push(`/group/${routeId}`);
+            this.getMembers();
+            this.getGroupInfo();
+            this.getGroupRole();
+            if (this.group.isPrivate) {
+              alert("Request sent successfully! Please wait for approval.");
+            } else {
+              alert("You have joined the group!");
+            }
           } else {
+            alert("Request failed!");
             console.log(response);
           }
         })
         .catch(function (error) {
+          alert("Request failed!");
           console.log(error);
         });
     },
@@ -190,12 +355,12 @@ export default defineComponent({
       console.log(`/api/group-leave/${this.group.id}`);
       axios
         .post(`/api/group-leave/${this.group.id}`)
-        .then(function (response) {
+        .then((response) => {
           if (response.data.success) {
             console.log(response);
-            // TODO: route this to force refresh page
-            //   const routeId = this.$route.params.groupID;
-            //   this.$router.push(`/group/${routeId}`);
+            this.getMembers();
+            this.getGroupInfo();
+            this.getGroupRole();
           } else {
             console.log(response);
           }
@@ -209,15 +374,25 @@ export default defineComponent({
   data() {
     return {
       headers: [
-        { title: "displayName", key: "displayName" },
-        { title: "username", key: "username" },
+        { title: "Display Name", key: "displayName" },
+        { title: "Username", key: "username" },
+        { title: "Actions", key: "actions" },
       ],
       memberList: [],
       group: "",
       message: "",
       success: "",
+      ownerID: null,
       isOwner: this.isOwner,
       isMember: this.isMember,
+      isJoining: false,
+      pendingRequests: [],
+      dialog: false,
+      requestHeaders: [
+        { title: "Display Name", key: "displayName" },
+        { title: "Username", key: "username" },
+        { title: "Actions", key: "actions" },
+      ],
     };
   },
 
@@ -225,6 +400,15 @@ export default defineComponent({
     this.getGroupInfo();
     this.getGroupRole();
     this.getMembers();
+    if (this.isOwner) {
+      this.getPendingRequests();
+    }
   },
 });
 </script>
+<style scoped>
+.small-button {
+  padding: 4px 8px;
+  font-size: 0.7rem;
+}
+</style>
