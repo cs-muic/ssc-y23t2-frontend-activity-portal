@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <center>
-      <h1>Group List</h1>
+      <h1>My Groups</h1>
     </center>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
 
