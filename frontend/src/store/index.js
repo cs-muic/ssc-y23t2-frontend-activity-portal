@@ -10,6 +10,7 @@ export default createStore({
     displayName: null,
     role: "",
     userID: null,
+    myGroups: {},
   },
   getters: {},
   mutations: {
@@ -28,6 +29,11 @@ export default createStore({
       state.name = null;
       state.role = "";
       state.userID = null;
+    },
+    setGroup: function (state, group) {
+      console.log(group.id);
+      console.log(group.groupName);
+      state.myGroups[group.id] = group.groupName;
     },
   },
   actions: {},

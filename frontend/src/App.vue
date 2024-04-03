@@ -144,7 +144,7 @@ export default {
     send_message: null,
     messageRules: [],
     connected: false,
-    groupID: 8,
+    groupID: null,
   }),
   methods: {
     //getting the username from the store
@@ -185,11 +185,13 @@ export default {
         const msg = {
           username: this.getUsername(),
           content: this.send_message,
+          groupID: this.groupID,
         };
         this.stompClient.send("/api/socket/messages", JSON.stringify(msg), {});
       }
     },
     connect() {
+      this.getMyGroups();
       this.socket = new SockJS("/api/portal-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
@@ -198,9 +200,14 @@ export default {
           this.connected = true;
           console.log(frame);
           this.stompClient.subscribe("/api/topic/messages", (tick) => {
+            const message = JSON.parse(tick.body);
             console.log("GOT SMTH");
             console.log(tick);
-            this.received_messages.push(JSON.parse(tick.body));
+            axios
+              .get(`/api/get-group-role/${message.groupID}`)
+              .then((response) => {
+                if (response.isMember()) this.received_messages.push(message);
+              });
           });
         },
         (error) => {
@@ -216,6 +223,20 @@ export default {
       this.connected = false;
       this.openChat = false;
       this.received_messages = [];
+    },
+    getMyGroups() {
+      return axios
+        .get("/api/fetch-my-groups")
+        .then((response) => {
+          console.log(response);
+          for (let i = 0; i < response.data.group.length; i++) {
+            let group = response.data.group[i];
+            console.log(group);
+            this.$store.commit("setGroup", group);
+          }
+          console.log(this.$store.state.myGroups);
+        })
+        .catch((err) => alert(err));
     },
   },
 };
