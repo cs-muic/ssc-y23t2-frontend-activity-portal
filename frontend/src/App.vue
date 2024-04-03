@@ -184,7 +184,6 @@ export default {
       if (this.stompClient && this.stompClient.connected) {
         const msg = {
           username: this.getUsername(),
-          groupID: this.groupID,
           content: this.send_message,
         };
         this.stompClient.send("/api/socket/messages", JSON.stringify(msg), {});
