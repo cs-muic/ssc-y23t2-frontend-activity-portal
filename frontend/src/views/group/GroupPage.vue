@@ -156,12 +156,6 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import router from "@/router";
 
-/**
- * TODO:
- * - Check if user alr joined group then turn join button to leave button
- * - Disable edit button for non-admin
- */
-
 // Components
 export default defineComponent({
   props: {},
@@ -196,7 +190,7 @@ export default defineComponent({
     rejectRequest(userID) {
       axios
         .post(
-          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+          `/api/reject-join-request/${this.$route.params.groupID}/${userID}`
         )
         .then((response) => {
           if (response.data.success) {
@@ -349,7 +343,8 @@ export default defineComponent({
         .catch(function (error) {
           alert("Request failed!");
           console.log(error);
-        });
+        })
+        .finally(this.$router.go());
     },
     leaveGroup() {
       console.log(`/api/group-leave/${this.group.id}`);
@@ -361,13 +356,17 @@ export default defineComponent({
             this.getMembers();
             this.getGroupInfo();
             this.getGroupRole();
+            alert("You have left the group!");
           } else {
+            alert("Failed to leave group!");
             console.log(response);
           }
         })
         .catch(function (error) {
+          alert("Failed to leave group!");
           console.log(error);
-        });
+        })
+        .finally(this.$router.go());
     },
   },
 
