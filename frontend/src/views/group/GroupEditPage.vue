@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <h1 class="text-center">Edit Group : {{ groupName }}</h1>
+    <div style="text-align: center">
+      <h1 class="text-center">Edit Group : {{ groupName }}</h1>
+      <v-btn @click="goToGroup()" color="#4f1811">Return to group</v-btn>
+    </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
   </v-container>
   <v-col align-self="center">
@@ -27,7 +30,7 @@
             :rules="publicDescriptionRules"
             label="Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <v-text-field
             v-if="isPrivate"
@@ -35,7 +38,7 @@
             :rules="privateDescriptionRules"
             label="Private Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
@@ -131,6 +134,9 @@ export default defineComponent({
       this.isPrivate = this.data.group.isPrivate;
       this.publicDescription = this.data.group.publicDescription;
       this.privateDescription = this.data.group.privateDescription;
+    },
+    goToGroup() {
+      router.push(`/group/${this.$route.params.groupID}`);
     },
     getGroupInfo() {
       axios

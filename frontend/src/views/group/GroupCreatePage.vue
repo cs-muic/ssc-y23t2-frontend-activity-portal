@@ -37,7 +37,7 @@
             :rules="publicDescriptionRules"
             label="Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <v-text-field
             v-if="isPrivate"
@@ -45,7 +45,7 @@
             :rules="privateDescriptionRules"
             label="Private Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <v-text-field
             v-model="tagInfo.gameName"
