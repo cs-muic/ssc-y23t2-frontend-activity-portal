@@ -190,7 +190,7 @@ export default defineComponent({
     rejectRequest(userID) {
       axios
         .post(
-          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+          `/api/reject-join-request/${this.$route.params.groupID}/${userID}`
         )
         .then((response) => {
           if (response.data.success) {
