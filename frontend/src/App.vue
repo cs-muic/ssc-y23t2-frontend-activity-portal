@@ -195,7 +195,7 @@ export default {
         name,
       }));
       array.push({ id: null, name: "Public chat" });
-      console.log(array);
+      console.log(this.$store.state.myGroups);
       this.groups = array;
     },
     status() {
