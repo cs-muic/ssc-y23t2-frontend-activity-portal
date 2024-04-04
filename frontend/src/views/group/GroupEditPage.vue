@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <h1 class="text-center">Edit Group : {{ groupName }}</h1>
+    <div style="text-align: center">
+      <h1 class="text-center">Edit Group : {{ groupName }}</h1>
+      <v-btn @click="goToGroup()" color="#4f1811">Return to group</v-btn>
+    </div>
     <v-divider :thickness="20" class="border-opacity-0"></v-divider>
   </v-container>
   <v-col align-self="center">
@@ -18,16 +21,6 @@
                 :maxlength="64"
               ></v-text-field>
             </v-col>
-            <!-- <v-col cols="12" sm="1" md="2">
-                <v-text-field
-                  v-on:keypress="NumbersOnly"
-                  v-model.numbers="maxMember"
-                  :rules="maxMemberRules"
-                  label="Group size"
-                  type="number"
-                  required
-                ></v-text-field>
-              </v-col> -->
             <v-col cols="12" sm="3" md="auto">
               <v-checkbox v-model="isPrivate" label="Private"></v-checkbox>
             </v-col>
@@ -37,7 +30,7 @@
             :rules="publicDescriptionRules"
             label="Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <v-text-field
             v-if="isPrivate"
@@ -45,7 +38,7 @@
             :rules="privateDescriptionRules"
             label="Private Description"
             counter
-            :maxlength="256"
+            :maxlength="255"
           ></v-text-field>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
@@ -77,12 +70,6 @@ export default defineComponent({
       valid: true,
       groupName: this.groupName,
       groupNameRules: [(v) => !!v || "Group name is required!"],
-      //   maxMember: "",
-      //   maxMemberRules: [
-      //     (v) =>
-      //       (!!v && parseInt(v) == v && v >= 2 && v <= 255) ||
-      //       "The group size must be an integer between 2-255!",
-      //   ],
       publicDescription: this.publicDescription,
       isPrivate: this.isPrivate,
       publicDescriptionRules: [],
@@ -99,21 +86,21 @@ export default defineComponent({
           id: this.groupID,
           groupName: this.groupName,
           isPrivate: this.isPrivate,
-          //   maxMember: parseInt(this.maxMember),
           publicDescription: this.publicDescription,
           privateDescription: this.privateDescription,
           ownerID: this.$store.state.userID,
         };
+        const groupID = group.id;
         console.log(group);
         axios
           .post(`/api/group-edit`, group)
           .then(function (response) {
             if (response.data.success) {
               console.log(response);
-              // TODO: route this dynamically
-              router.push(`/group-search`);
-              //   const routeId = this.$route.params.groupID;
-              //   this.$router.push(`/group/${routeId}`);
+              router.push({
+                name: `group-page`,
+                params: { groupID },
+              });
             } else {
               console.log(response);
             }
@@ -132,10 +119,7 @@ export default defineComponent({
         .then(function (response) {
           if (response.data.success) {
             console.log(response);
-            // TODO: route this dynamically
-            router.push(`/group-search`);
-            //   const routeId = this.$route.params.groupID;
-            //   this.$router.push(`/group/${routeId}`);
+            router.push(`/my-groups`);
           } else {
             console.log(response);
           }
@@ -146,6 +130,13 @@ export default defineComponent({
     },
     reset() {
       this.$refs.form.reset();
+      this.groupName = this.data.group.groupName;
+      this.isPrivate = this.data.group.isPrivate;
+      this.publicDescription = this.data.group.publicDescription;
+      this.privateDescription = this.data.group.privateDescription;
+    },
+    goToGroup() {
+      router.push(`/group/${this.$route.params.groupID}`);
     },
     getGroupInfo() {
       axios
@@ -165,12 +156,13 @@ export default defineComponent({
             this.groupName = response.data.group.groupName;
             this.isPrivate = response.data.group.isPrivate;
             this.ownerID = response.data.group.ownerID;
-            this.privateDescription = response.data.group.privateDescription;
+            this.privateDescription = response.data.group.isPrivate
+              ? response.data.group.privateDescription
+              : "";
             this.publicDescription = response.data.group.publicDescription;
           }
         })
         .catch((err) => {
-          // alert(err);
           console.log(err);
           router.push("/");
         });

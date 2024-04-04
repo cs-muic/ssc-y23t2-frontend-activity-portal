@@ -56,7 +56,10 @@
             <tbody>
               <tr v-for="item in received_messages" :key="item">
                 <td>
-                  <h4>{{ item.username }}</h4>
+                  <h4 v-if="item.username">{{ item.username }}</h4>
+                  <h3 v-if="item.groupID">
+                    GROUP: {{ getGroupname(item.groupID) }}
+                  </h3>
                   {{ item.message }}
                 </td>
               </tr>
@@ -144,7 +147,7 @@ export default {
     send_message: null,
     messageRules: [],
     connected: false,
-    groupID: 8,
+    groupID: null,
   }),
   methods: {
     //getting the username from the store
@@ -155,6 +158,9 @@ export default {
       } else {
         return username;
       }
+    },
+    getGroupname(groupID) {
+      return this.$store.state.myGroups[groupID];
     },
     status() {
       let username = this.$store.state.username;
@@ -184,8 +190,8 @@ export default {
       if (this.stompClient && this.stompClient.connected) {
         const msg = {
           username: this.getUsername(),
-          groupID: this.groupID,
           content: this.send_message,
+          groupID: this.groupID,
         };
         this.stompClient.send("/api/socket/messages", JSON.stringify(msg), {});
       }
@@ -199,9 +205,18 @@ export default {
           this.connected = true;
           console.log(frame);
           this.stompClient.subscribe("/api/topic/messages", (tick) => {
+            const message = JSON.parse(tick.body);
             console.log("GOT SMTH");
             console.log(tick);
-            this.received_messages.push(JSON.parse(tick.body));
+            if (message.groupID) {
+              axios
+                .get(`/api/get-group-role/${message.groupID}`)
+                .then((response) => {
+                  console.log(response);
+                  if (response.data.member)
+                    this.received_messages.push(message);
+                });
+            } else this.received_messages.push(message);
           });
         },
         (error) => {

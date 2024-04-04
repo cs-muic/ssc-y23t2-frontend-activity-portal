@@ -136,6 +136,18 @@ router.beforeEach(async (to, from, next) => {
   let response = await axios.get("/api/whoami");
   // eslint-disable-next-line no-unused-vars
   store.commit("setLoggedInUser", response.data);
+  await axios
+    .get("/api/fetch-my-groups")
+    .then((response) => {
+      if (response.data.group) {
+        for (let i = 0; i < response.data.group.length; i++) {
+          let group = response.data.group[i];
+          store.commit("setGroup", group);
+        }
+        console.log(store.state.myGroups);
+      }
+    })
+    .catch((err) => alert(err));
   let isLoggedIn = store.state.loggedIn;
   if (
     to.name !== "login" &&

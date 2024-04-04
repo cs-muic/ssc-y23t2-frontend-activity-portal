@@ -1,166 +1,222 @@
 <template>
   <v-col align-self="center">
     <v-container>
-      <h1 class="text-center">{{ group.groupName }}</h1>
-      <div class="text-center">{{ group.id }}</div>
+      <h1 class="text-center text-h3">{{ group.groupName }}</h1>
+      <v-divider :thickness="15" class="border-opacity-0"></v-divider>
+
+      <div class="text-center"># {{ group.id }}</div>
       <v-divider :thickness="20" class="border-opacity-0"></v-divider>
     </v-container>
-    <v-sheet class="mx-auto w-75 h-50">
-      <v-container class="mx-auto w-65 h-40">
-        {{ group.memberCount }} / {{ group.maxMember }}
-        <h1>{{ group.publicDescription }}</h1>
-        <v-container v-if="this.isMember">
-          {{ group.privateDescription }}
-        </v-container>
-        <v-btn
-          block
-          v-if="this.isOwner"
-          class="mt-1"
-          color="#ad1d25"
-          @click="routeEditGroup()"
-        >
-          Edit Group
-        </v-btn>
-        <v-btn
-          block
-          v-if="this.isOwner"
-          class="mt-1"
-          color="#ad1d25"
-          @click="routeCreateActivity()"
-        >
-          Create Activity
-        </v-btn>
-        <v-btn
-          block
-          v-if="!this.isMember && !this.isOwner"
-          class="mt-1"
-          color="#ad1d25"
-          @click="joinGroup()"
-          :disabled="isJoining"
-        >
-          Join Group
-        </v-btn>
-        <v-btn
-          block
-          v-if="this.isMember"
-          class="mt-1"
-          color="#ad1d25"
-          @click="checkActivity()"
-        >
-          Check Activity
-        </v-btn>
-        <v-btn
-          block
-          v-if="this.isMember && !this.isOwner"
-          class="mt-1"
-          color="#ad1d25"
-          @click="leaveGroup()"
-        >
-          Leave Group
-        </v-btn>
-        <v-btn
-          block
-          v-if="isOwner && group.isPrivate"
-          class="mt-1"
-          color="#ad1d25"
-          @click="getPendingRequests()"
-        >
-          Pending Requests
-        </v-btn>
-        <v-dialog v-model="dialog" max-width="600px">
-          <v-card>
-            <v-card-title class="text-center">Pending Requests</v-card-title>
-            <v-card-text>
-              <v-data-table :headers="requestHeaders" :items="pendingRequests">
-                <template v-slot:[`item.displayName`]="{ item }">{{
-                  item.displayName
-                }}</template>
-                <template v-slot:[`item.username`]="{ item }">{{
-                  item.username
-                }}</template>
-                <template v-slot:[`item.actions`]="{ item }">
-                  <div class="d-flex justify-space-between">
+    <v-container>
+      <v-row>
+        <v-col class="mx-auto w-50 h-100">
+          <v-sheet class="mx-auto w-100 h-50">
+            <v-container class="mx-auto w-65 h-40">
+              {{ group.memberCount }} / {{ group.maxMember }}
+              <v-container class="mx-auto w-20 h-40">
+                <v-sheet :elevation="24" :height="200">
+                  <v-container class="mx-auto w-15 h-30">
+                    <h1 class="text-h5">Description:</h1>
+                    <v-divider
+                      :thickness="2"
+                      class="border-opacity-2"
+                    ></v-divider>
+                    <v-divider
+                      :thickness="20"
+                      class="border-opacity-0"
+                    ></v-divider>
+                    <h1 class="text-body-1">{{ group.publicDescription }}</h1>
+                  </v-container>
+                </v-sheet>
+              </v-container>
+              <v-container v-if="this.isMember && group.isPrivate">
+                <v-sheet :elevation="24" :height="200">
+                  <v-container class="mx-auto w-15 h-30">
+                    <h1 class="text-h5">Private Description:</h1>
+                    <v-divider
+                      :thickness="2"
+                      class="border-opacity-2"
+                    ></v-divider>
+                    <v-divider
+                      :thickness="20"
+                      class="border-opacity-0"
+                    ></v-divider>
+                    <h1 class="text-body-1">{{ group.privateDescription }}</h1>
+                  </v-container>
+                </v-sheet>
+              </v-container>
+              <v-container class="mx-auto w-20 h-40">
+                <v-row>
+                  <v-col class="mx-auto">
                     <v-btn
-                      flex
-                      class="small-button"
-                      color="blue"
-                      @click="viewProfile(item.username)"
-                    >
-                      View Profile
-                    </v-btn>
-                    <v-btn
-                      flex
-                      class="small-button"
-                      color="green"
-                      @click="acceptRequest(item.joinRequest.userID)"
-                    >
-                      Accept
-                    </v-btn>
-                    <v-btn
-                      flex
-                      class="small-button"
+                      block
+                      v-if="this.isOwner"
+                      class="mt-1"
                       color="#ad1d25"
-                      @click="rejectRequest(item.joinRequest.userID)"
+                      @click="routeEditGroup()"
                     >
-                      Reject
+                      Edit Group
                     </v-btn>
-                  </div>
-                </template>
-              </v-data-table>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
+                  </v-col>
+                  <v-col class="mx-auto">
+                    <v-btn
+                      block
+                      v-if="this.isOwner"
+                      class="mt-1"
+                      color="#ad1d25"
+                      @click="routeCreateActivity()"
+                    >
+                      Create Activity
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      block
+                      v-if="isOwner && group.isPrivate"
+                      class="mt-1"
+                      color="#ad1d25"
+                      @click="getPendingRequests()"
+                    >
+                      Pending Requests
+                    </v-btn></v-col
+                  >
+                </v-row>
+              </v-container>
+
               <v-btn
-                color="#b01c24"
-                text
-                @click="
-                  dialog = false;
-                  getGroupInfo();
-                  getMembers();
-                "
-                >Close</v-btn
+                block
+                v-if="!this.isMember && !this.isOwner"
+                class="mt-1"
+                color="#ad1d25"
+                @click="joinGroup()"
+                :disabled="isJoining"
               >
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-container>
-    </v-sheet>
+                Join Group
+              </v-btn>
+              <v-btn
+                block
+                v-if="this.isMember"
+                class="mt-1"
+                color="#ad1d25"
+                @click="checkActivity()"
+              >
+                Check Activity
+              </v-btn>
+              <v-btn
+                block
+                v-if="this.isMember && !this.isOwner"
+                class="mt-1"
+                color="#ad1d25"
+                @click="leaveGroup()"
+              >
+                Leave Group
+              </v-btn>
+
+              <v-dialog v-model="dialog" max-width="600px">
+                <v-card>
+                  <v-card-title class="text-center"
+                    >Pending Requests</v-card-title
+                  >
+                  <v-card-text>
+                    <v-data-table
+                      :headers="requestHeaders"
+                      :items="pendingRequests"
+                    >
+                      <template v-slot:[`item.displayName`]="{ item }">{{
+                        item.displayName
+                      }}</template>
+                      <template v-slot:[`item.username`]="{ item }">{{
+                        item.username
+                      }}</template>
+                      <template v-slot:[`item.actions`]="{ item }">
+                        <div class="d-flex justify-space-between">
+                          <v-btn
+                            flex
+                            class="small-button"
+                            color="blue"
+                            @click="viewProfile(item.username)"
+                          >
+                            View Profile
+                          </v-btn>
+                          <v-btn
+                            flex
+                            class="small-button"
+                            color="green"
+                            @click="acceptRequest(item.joinRequest.userID)"
+                          >
+                            Accept
+                          </v-btn>
+                          <v-btn
+                            flex
+                            class="small-button"
+                            color="#ad1d25"
+                            @click="rejectRequest(item.joinRequest.userID)"
+                          >
+                            Reject
+                          </v-btn>
+                        </div>
+                      </template>
+                    </v-data-table>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="#b01c24"
+                      text
+                      @click="
+                        dialog = false;
+                        getGroupInfo();
+                        getMembers();
+                      "
+                      >Close</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-container>
+          </v-sheet>
+        </v-col>
+        <v-col class="mx-auto w-50 h-100">
+          <v-container>
+            <h1 class="text-center">Member List</h1>
+            <v-divider :thickness="20" class="border-opacity-0"></v-divider>
+            <v-data-table :headers="headers" :items="memberList">
+              <template v-slot:[`item.displayName`]="{ item }">{{
+                item.displayName
+              }}</template>
+              <template v-slot:[`item.username`]="{ item }">{{
+                item.username
+              }}</template>
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-btn
+                  class="mr-4"
+                  color="blue"
+                  @click="viewProfile(item.username)"
+                >
+                  View Profile
+                </v-btn>
+                <v-btn
+                  v-if="isOwner && item.id !== ownerID"
+                  color="#ad1d25"
+                  @click="kickMember(item.id)"
+                >
+                  Kick
+                </v-btn>
+              </template>
+            </v-data-table>
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-col>
-  <v-container>
-    <h1 class="text-center">Member List</h1>
-    <v-divider :thickness="20" class="border-opacity-0"></v-divider>
-    <v-data-table :headers="headers" :items="memberList">
-      <template v-slot:[`item.displayName`]="{ item }">{{
-        item.displayName
-      }}</template>
-      <template v-slot:[`item.username`]="{ item }">{{
-        item.username
-      }}</template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-btn class="mr-4" color="blue" @click="viewProfile(item.username)">
-          View Profile
-        </v-btn>
-        <v-btn
-          v-if="isOwner && item.id !== ownerID"
-          color="#ad1d25"
-          @click="kickMember(item.id)"
-        >
-          Kick
-        </v-btn>
-      </template>
-    </v-data-table>
-  </v-container>
 </template>
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
 import router from "@/router";
-
-/**
- * TODO:
- * - Check if user alr joined group then turn join button to leave button
- * - Disable edit button for non-admin
- */
+import app from "@/App.vue";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 // Components
 export default defineComponent({
@@ -196,7 +252,7 @@ export default defineComponent({
     rejectRequest(userID) {
       axios
         .post(
-          `/api/accept-join-request/${this.$route.params.groupID}/${userID}`
+          `/api/reject-join-request/${this.$route.params.groupID}/${userID}`
         )
         .then((response) => {
           if (response.data.success) {
@@ -319,6 +375,13 @@ export default defineComponent({
     },
     routeCreateActivity() {
       console.log(`/group/${this.group.id}/activity-create`);
+      if (!app.stompClient || !app.stompClient.connected) {
+        app.socket = new SockJS("/api/portal-socket");
+        app.stompClient = Stomp.over(app.socket);
+        app.stompClient.connect({}, (frame) => {
+          console.log(frame);
+        });
+      }
       router.push(`/group/${this.group.id}/activity-create`);
     },
     checkActivity() {
@@ -349,7 +412,8 @@ export default defineComponent({
         .catch(function (error) {
           alert("Request failed!");
           console.log(error);
-        });
+        })
+        .finally(this.$router.go());
     },
     leaveGroup() {
       console.log(`/api/group-leave/${this.group.id}`);
@@ -361,13 +425,17 @@ export default defineComponent({
             this.getMembers();
             this.getGroupInfo();
             this.getGroupRole();
+            alert("You have left the group!");
           } else {
+            alert("Failed to leave group!");
             console.log(response);
           }
         })
         .catch(function (error) {
+          alert("Failed to leave group!");
           console.log(error);
-        });
+        })
+        .finally(this.$router.go());
     },
   },
 
