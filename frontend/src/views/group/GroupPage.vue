@@ -6,6 +6,21 @@
 
       <div class="text-center"># {{ group.id }}</div>
       <v-divider :thickness="20" class="border-opacity-0"></v-divider>
+
+      <div>
+        <v-chip
+          v-for="(tag, i) in tags"
+          :key="i"
+          color="red"
+          class="ma-1"
+          small
+          :value="tag"
+          filter
+        >
+          <v-icon left>mdi-label</v-icon>
+          {{ tag }}
+        </v-chip>
+      </div>
     </v-container>
     <v-container>
       <v-row>
@@ -324,6 +339,7 @@ export default defineComponent({
             this.message = this.data.message;
             this.success = this.data.success;
             this.ownerID = this.data.group.ownerID;
+            this.tags = JSON.parse(this.data.group.tagInfo);
           } else {
             console.log("This group does not exist!");
             router.push("/");
