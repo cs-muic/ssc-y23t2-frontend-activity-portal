@@ -214,6 +214,9 @@
 import { defineComponent } from "vue";
 import axios from "axios";
 import router from "@/router";
+import app from "@/App.vue";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 // Components
 export default defineComponent({
@@ -372,6 +375,13 @@ export default defineComponent({
     },
     routeCreateActivity() {
       console.log(`/group/${this.group.id}/activity-create`);
+      if (!app.stompClient || !app.stompClient.connected) {
+        app.socket = new SockJS("/api/portal-socket");
+        app.stompClient = Stomp.over(app.socket);
+        app.stompClient.connect({}, (frame) => {
+          console.log(frame);
+        });
+      }
       router.push(`/group/${this.group.id}/activity-create`);
     },
     checkActivity() {
