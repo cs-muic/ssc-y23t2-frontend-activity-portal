@@ -30,8 +30,10 @@ export default createStore({
       state.role = "";
       state.userID = null;
     },
-    setGroup: function (state, group) {
+    clearGroup: function (state) {
       state.myGroups.clear();
+    },
+    setGroup: function (state, group) {
       state.myGroups.set(group.id, group.groupName);
     },
   },
