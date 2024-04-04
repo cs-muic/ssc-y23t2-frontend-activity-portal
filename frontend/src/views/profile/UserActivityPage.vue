@@ -49,11 +49,15 @@ export default {
         });
     },
     formatDate(dateString) {
-      // Convert the date string to a Date object
-      let date = new Date(dateString);
-
-      // Return the local string
-      return date.toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+      const options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Bangkok",
+      };
+      return new Date(dateString).toLocaleString(undefined, options);
     },
   },
 
