@@ -46,6 +46,10 @@ export default {
         });
     },
     formatDate(dateString) {
+      // Convert the date string to a Date object
+      let date = new Date(dateString);
+
+      // Specify the options for the toLocaleString method
       const options = {
         year: "numeric",
         month: "numeric",
@@ -54,7 +58,9 @@ export default {
         minute: "2-digit",
         timeZone: "Asia/Bangkok",
       };
-      return new Date(dateString).toLocaleString(undefined, options);
+
+      // Return the local string in Thailand's local time
+      return date.toLocaleString(undefined, options);
     },
   },
 
