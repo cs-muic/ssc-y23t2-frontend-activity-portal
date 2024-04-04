@@ -129,10 +129,12 @@ export default defineComponent({
         .get("/api/group-search/fetch-all-groups")
         .then((response) => {
           this.data = response.data;
-          this.groupList = this.data.group.map((group) => {
-            group.tagInfo = JSON.parse(group.tagInfo);
-            return group;
-          });
+          if (this.data.group) {
+            this.groupList = this.data.group.map((group) => {
+              group.tagInfo = JSON.parse(group.tagInfo);
+              return group;
+            });
+          } else this.groupList = [];
           this.message = this.data.message;
           this.success = this.data.success;
           console.log(response.data);
