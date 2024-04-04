@@ -56,7 +56,10 @@
             <tbody>
               <tr v-for="item in received_messages" :key="item">
                 <td>
-                  <h4>{{ item.username }}</h4>
+                  <h4 v-if="item.username">{{ item.username }}</h4>
+                  <h3 v-if="item.groupID">
+                    GROUP: {{ getGroupname(item.groupID) }}
+                  </h3>
                   {{ item.message }}
                 </td>
               </tr>
@@ -156,6 +159,9 @@ export default {
         return username;
       }
     },
+    getGroupname(groupID) {
+      return this.$store.state.myGroups[groupID];
+    },
     status() {
       let username = this.$store.state.username;
       if (username == null) {
@@ -202,11 +208,15 @@ export default {
             const message = JSON.parse(tick.body);
             console.log("GOT SMTH");
             console.log(tick);
-            axios
-              .get(`/api/get-group-role/${message.groupID}`)
-              .then((response) => {
-                if (response.isMember()) this.received_messages.push(message);
-              });
+            if (message.groupID) {
+              axios
+                .get(`/api/get-group-role/${message.groupID}`)
+                .then((response) => {
+                  console.log(response);
+                  if (response.data.member)
+                    this.received_messages.push(message);
+                });
+            } else this.received_messages.push(message);
           });
         },
         (error) => {
