@@ -143,7 +143,7 @@ router.beforeEach(async (to, from, next) => {
     to.name !== "welcome" &&
     !isLoggedIn
   )
-    next({ name: "login" });
+    next({ name: "welcome" });
   else next();
 });
 
