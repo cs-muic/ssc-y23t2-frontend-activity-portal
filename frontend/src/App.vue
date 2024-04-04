@@ -57,9 +57,9 @@
               <tr v-for="item in received_messages" :key="item">
                 <td>
                   <h4 v-if="item.username">{{ item.username }}</h4>
-                  <h3 v-if="item.groupID">
+                  <h5 v-if="item.groupID">
                     GROUP: {{ getGroupname(item.groupID) }}
-                  </h3>
+                  </h5>
                   {{ item.message }}
                 </td>
               </tr>
@@ -67,13 +67,34 @@
           </v-table>
           <div class="bottom">
             <v-card>
-              <v-text-field
-                v-model="send_message"
-                :rules="messageRules"
-                label="Send your message"
-                base-color="gray"
-              ></v-text-field>
-              <v-btn type="submit" block @click="send">send</v-btn>
+              <v-container class="ga-0">
+                <v-row class="ga-0">
+                  <v-col class="ga-0">
+                    <v-text-field
+                      v-model="send_message"
+                      :rules="messageRules"
+                      label="Send your message"
+                      base-color="gray"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="2" class="ga-0">
+                    <v-select
+                      v-model="group"
+                      :items="groups"
+                      item-title="name"
+                      item-value="id"
+                      label="Select"
+                      return-object
+                      single-line
+                      @update:modelValue="changeGroup(group.id)"
+                      @click="getGroups()"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-btn type="submit" block @click="send" class="mt-n7 mx-auto"
+                >send</v-btn
+              >
             </v-card>
           </div>
         </v-container>
@@ -135,6 +156,7 @@ export default {
   name: "App",
 
   data: () => ({
+    group: { id: null, name: "Public Chat" },
     items: [
       { title: "Join Group", link: "/group-search" },
       { title: "Create Group", link: "/group-create" },
@@ -147,7 +169,8 @@ export default {
     send_message: null,
     messageRules: [],
     connected: false,
-    groupID: null,
+    chatGroupID: null,
+    groups: [],
   }),
   methods: {
     //getting the username from the store
@@ -160,7 +183,20 @@ export default {
       }
     },
     getGroupname(groupID) {
-      return this.$store.state.myGroups[groupID];
+      return this.$store.state.myGroups.get(groupID);
+    },
+    changeGroup(id) {
+      this.chatGroupID = id;
+      console.log(this.chatGroupID);
+    },
+    getGroups() {
+      let array = Array.from(this.$store.state.myGroups, ([id, name]) => ({
+        id,
+        name,
+      }));
+      array.push({ id: null, name: "Public chat" });
+      console.log(array);
+      this.groups = array;
     },
     status() {
       let username = this.$store.state.username;
@@ -191,7 +227,7 @@ export default {
         const msg = {
           username: this.getUsername(),
           content: this.send_message,
-          groupID: this.groupID,
+          groupID: this.chatGroupID,
         };
         this.stompClient.send("/api/socket/messages", JSON.stringify(msg), {});
       }

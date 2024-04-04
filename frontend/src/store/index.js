@@ -10,7 +10,7 @@ export default createStore({
     displayName: null,
     role: "",
     userID: null,
-    myGroups: {},
+    myGroups: new Map(),
   },
   getters: {},
   mutations: {
@@ -31,7 +31,8 @@ export default createStore({
       state.userID = null;
     },
     setGroup: function (state, group) {
-      state.myGroups[group.id] = group.groupName;
+      state.myGroups.clear();
+      state.myGroups.set(group.id, group.groupName);
     },
   },
   actions: {},
