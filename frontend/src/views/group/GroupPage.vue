@@ -403,17 +403,19 @@ export default defineComponent({
               alert("Request sent successfully! Please wait for approval.");
             } else {
               alert("You have joined the group!");
+              this.$router.go();
             }
           } else {
             alert("Request failed!");
             console.log(response);
+            this.$router.go();
           }
         })
         .catch(function (error) {
           alert("Request failed!");
           console.log(error);
-        })
-        .finally(this.$router.go());
+          this.$router.go();
+        });
     },
     leaveGroup() {
       console.log(`/api/group-leave/${this.group.id}`);
@@ -426,16 +428,18 @@ export default defineComponent({
             this.getGroupInfo();
             this.getGroupRole();
             alert("You have left the group!");
+            this.$router.go();
           } else {
             alert("Failed to leave group!");
             console.log(response);
+            this.$router.go();
           }
         })
         .catch(function (error) {
           alert("Failed to leave group!");
           console.log(error);
-        })
-        .finally(this.$router.go());
+          this.$router.go();
+        });
     },
   },
 
