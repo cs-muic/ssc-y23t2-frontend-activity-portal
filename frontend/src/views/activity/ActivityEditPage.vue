@@ -111,6 +111,7 @@ export default {
           description: this.activity.description,
           status: this.activity.status,
         };
+
         axios
           .put(
             `api/${this.$route.params.groupID}/activity-edit/${this.$route.params.activityID}`,
