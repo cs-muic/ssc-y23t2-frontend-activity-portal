@@ -164,7 +164,8 @@ export default defineComponent({
           isPrivate: this.isPrivate,
           maxMember: parseInt(this.maxMember),
           publicDescription: this.publicDescription,
-          privateDescription: this.isprivate ? this.privateDescription : "",
+          privateDescription:
+            this.isPrivate === true ? this.privateDescription : "",
           ownerID: this.$store.state.userID,
           tagInfo: JSON.stringify(this.tagInfo),
         };
