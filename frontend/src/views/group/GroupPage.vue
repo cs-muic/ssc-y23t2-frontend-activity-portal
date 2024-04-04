@@ -78,39 +78,47 @@
                       @click="getPendingRequests()"
                     >
                       Pending Requests
-                    </v-btn></v-col
-                  >
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col class="mx-auto">
+                    <v-btn
+                      block
+                      v-if="this.isMember"
+                      class="mt-1"
+                      color="#ad1d25"
+                      @click="checkActivity()"
+                    >
+                      Check Activity
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col class="mx-auto"> </v-col>
+                  <v-col class="mx-auto">
+                    <v-btn
+                      block
+                      v-if="this.isMember && !this.isOwner"
+                      class="mt-1"
+                      color="#ad1d25"
+                      @click="leaveGroup()"
+                    >
+                      Leave Group
+                    </v-btn>
+                    <v-btn
+                      block
+                      v-if="!this.isMember && !this.isOwner"
+                      class="mt-1"
+                      color="#ad1d25"
+                      @click="joinGroup()"
+                      :disabled="isJoining"
+                    >
+                      Join Group
+                    </v-btn>
+                  </v-col>
                 </v-row>
               </v-container>
-
-              <v-btn
-                block
-                v-if="!this.isMember && !this.isOwner"
-                class="mt-1"
-                color="#ad1d25"
-                @click="joinGroup()"
-                :disabled="isJoining"
-              >
-                Join Group
-              </v-btn>
-              <v-btn
-                block
-                v-if="this.isMember"
-                class="mt-1"
-                color="#ad1d25"
-                @click="checkActivity()"
-              >
-                Check Activity
-              </v-btn>
-              <v-btn
-                block
-                v-if="this.isMember && !this.isOwner"
-                class="mt-1"
-                color="#ad1d25"
-                @click="leaveGroup()"
-              >
-                Leave Group
-              </v-btn>
 
               <v-dialog v-model="dialog" max-width="600px">
                 <v-card>
