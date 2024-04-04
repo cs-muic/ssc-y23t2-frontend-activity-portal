@@ -87,11 +87,10 @@ export default {
   },
 
   computed: {
-    endTimeNotEarlier() {
+    endTimeNotEarlier(value) {
       return (
-        !this.activity.end_time ||
-        new Date(this.activity.end_time) >=
-          new Date(this.activity.start_time) ||
+        !value ||
+        new Date(value) >= new Date(this.activity.start_time) ||
         "End time can't be before start time"
       );
     },
