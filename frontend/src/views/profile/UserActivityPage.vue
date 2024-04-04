@@ -40,6 +40,9 @@ export default {
         .get("api/user-activities")
         .then((response) => {
           this.activities = response.data;
+          this.activities.sort((a, b) => {
+            return new Date(a.start_time) - new Date(b.start_time);
+          });
         })
         .catch((err) => {
           console.log(err);

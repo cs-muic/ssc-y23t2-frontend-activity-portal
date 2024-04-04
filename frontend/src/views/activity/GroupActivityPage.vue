@@ -15,7 +15,10 @@
           >Edit
         </v-btn>
         <v-btn
-          v-if="isOwner && item.status === 'PENDING'"
+          v-if="
+            isOwner &&
+            (item.status === 'PENDING' || item.status === 'COMPLETED')
+          "
           @click="deleteActivity(item.id)"
           color="error"
           >Delete
@@ -72,6 +75,9 @@ export default {
         .then((response) => {
           console.log(response);
           this.getActivities();
+          this.activities.sort((a, b) => {
+            return new Date(a.start_time) - new Date(b.start_time);
+          });
         })
         .catch((err) => {
           console.log(err);
