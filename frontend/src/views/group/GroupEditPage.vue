@@ -40,6 +40,42 @@
             counter
             :maxlength="255"
           ></v-text-field>
+          <v-text-field
+            v-model="tagInfo.gameName"
+            label="Game Name"
+            counter
+            :maxlength="64"
+          ></v-text-field>
+          <v-row>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.region"
+                :items="regions"
+                label="Region"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.language"
+                :items="languages"
+                label="Language"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.playStyle"
+                :items="playStyles"
+                label="Play Style"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="tagInfo.skillLevel"
+                :items="skillLevels"
+                label="Skill Level"
+              ></v-select>
+            </v-col>
+          </v-row>
           <div class="d-flex flex-column">
             <v-btn block class="mt-4" color="#ad1d25" @click="submit">
               Edit Group
@@ -75,6 +111,35 @@ export default defineComponent({
       publicDescriptionRules: [],
       privateDescription: this.privateDescription,
       privateDescriptionRules: [],
+
+      tagInfo: {
+        gameName: "",
+        region: "",
+        language: "",
+        playStyle: "",
+        skillLevel: "",
+      },
+      regions: [
+        "North America",
+        "Europe",
+        "Asia",
+        "Oceania",
+        "South America",
+        "Africa",
+      ],
+      languages: [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Chinese (Mandarin)",
+        "Chinese (Cantonese)",
+        "Japanese",
+        "Thai",
+        "Hindi",
+      ],
+      playStyles: ["Casual", "Competitive"],
+      skillLevels: ["Beginner", "Intermediate", "Advanced", "Expert", "Pro"],
     };
   },
   components: {},
@@ -89,6 +154,7 @@ export default defineComponent({
           publicDescription: this.publicDescription,
           privateDescription: this.privateDescription,
           ownerID: this.$store.state.userID,
+          tagInfo: JSON.stringify(this.tagInfo),
         };
         const groupID = group.id;
         console.log(group);
@@ -160,6 +226,7 @@ export default defineComponent({
               ? response.data.group.privateDescription
               : "";
             this.publicDescription = response.data.group.publicDescription;
+            this.tagInfo = JSON.parse(response.data.group.tagInfo);
           }
         })
         .catch((err) => {
