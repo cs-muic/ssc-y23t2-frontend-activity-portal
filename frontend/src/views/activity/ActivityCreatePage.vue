@@ -60,6 +60,9 @@
 import axios from "axios";
 import router from "@/router";
 import moment from "moment";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
+import app from "@/App.vue";
 
 export default {
   name: "ActivityCreatePage",
@@ -120,9 +123,38 @@ export default {
         };
         axios
           .post(`/api/${this.$route.params.groupID}/activity-create`, activity)
-          .then(function (response) {
+          .then((response) => {
             if (response.data.success) {
               console.log(response);
+              console.log(this.$route.params.groupID);
+              if (app.stompClient && app.stompClient.connected) {
+                const info = {
+                  groupID: this.$route.params.groupID,
+                  content: "Group has made a new activity!",
+                };
+                console.log(info);
+                app.stompClient.send(
+                  "/api/socket/messages",
+                  JSON.stringify(info),
+                  {}
+                );
+              } else {
+                app.socket = new SockJS("/api/portal-socket");
+                app.stompClient = Stomp.over(app.socket);
+                app.stompClient.connect({}, (frame) => {
+                  console.log(frame);
+                });
+                let info;
+                info.groupID = this.groupID;
+                info.content = "Group has made a new activity!";
+                console.log(info);
+                app.stompClient.send(
+                  "/api/socket/messages",
+                  JSON.stringify(info),
+                  {}
+                );
+                app.stompClient.disconnect();
+              }
               router.push("/");
             } else {
               console.log(response);
