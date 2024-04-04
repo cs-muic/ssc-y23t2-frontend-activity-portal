@@ -87,11 +87,10 @@ export default {
   },
 
   computed: {
-    endTimeNotEarlier() {
+    endTimeNotEarlier(value) {
       return (
-        !this.activity.end_time ||
-        new Date(this.activity.end_time) >=
-          new Date(this.activity.start_time) ||
+        !value ||
+        new Date(value) >= new Date(this.activity.start_time) ||
         "End time can't be before start time"
       );
     },
@@ -105,11 +104,17 @@ export default {
       if (valid) {
         const activity = {
           name: this.activity.name,
-          start_time: new Date(this.activity.start_time).toISOString(),
-          end_time: new Date(this.activity.end_time).toISOString(),
+          start_time: new Date(this.activity.start_time).toLocaleString(
+            "en-US",
+            { timeZone: "Asia/Bangkok" }
+          ),
+          end_time: new Date(this.activity.end_time).toLocaleString("en-US", {
+            timeZone: "Asia/Bangkok",
+          }),
           cleanup_date: this.activity.cleanup_date,
           auto_delete_overtime: this.activity.auto_delete_overtime,
           description: this.activity.description,
+          status: this.activity.status,
         };
         axios
           .put(
