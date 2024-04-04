@@ -75,6 +75,9 @@ export default {
         .then((response) => {
           console.log(response);
           this.getActivities();
+          this.activities.sort((a, b) => {
+            return new Date(a.start_time) - new Date(b.start_time);
+          });
         })
         .catch((err) => {
           console.log(err);
